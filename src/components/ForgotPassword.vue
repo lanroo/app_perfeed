@@ -82,7 +82,6 @@ export default {
   animation: pulseLock 1.5s infinite; 
 }
 
-/* Additional styles */
 .background {
   position: fixed;
   top: 0;
@@ -99,7 +98,8 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  width: 320px;
+  max-width: 360px; 
+  width: 100%;
 }
 
 .title {
@@ -115,11 +115,17 @@ export default {
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease; 
+  box-sizing: border-box; 
+}
+.input:hover {
+  transform: scale(1.03); 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
 }
 
 .input.active, .input:focus {
   border-color: #5e60ce;
+  box-shadow: 0 2px 8px rgba(94, 96, 206, 0.5); 
 }
 
 .validation-message {
@@ -163,9 +169,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; 
-  padding: 20px; 
-  box-sizing: border-box; 
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 </style>
