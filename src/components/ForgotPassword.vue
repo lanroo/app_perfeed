@@ -3,16 +3,17 @@
     <div class="background"></div>
     <div class="content">
       <h2 class="title">Reset Your Password</h2>
-      <div class="lock"></div>
+      <div class="lock-icon"></div>
       <form @submit.prevent="resetPassword" class="form">
-        <input type="email" v-model="email" class="input" :class="{ 'active': email }" placeholder="Enter your email" autocomplete="email">
-        <div v-if="emailValidationMessage" class="validation-message">{{ emailValidationMessage }}</div>
+        <input type="email" v-model="email" class="input" :class="{ 'active': email }" placeholder="Enter your email" required autocomplete="email">
+        <p v-if="emailValidationMessage" class="validation-message">{{ emailValidationMessage }}</p>
         <button type="submit" class="button" :disabled="isSending">Send Reset Link</button>
       </form>
       <a href="#" @click="goBack" class="back-link">Back to Login</a>
     </div>
   </div>
 </template>
+
 
 <script>
 import Logo from '@/assets/logo.png';
@@ -64,103 +65,107 @@ export default {
 </script>
 
 <style scoped>
-.reset-password-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+@keyframes pulseLock {
+  0%, 100% {
+    transform: scale(1); 
+  }
+  50% {
+    transform: scale(1.1); 
+  }
 }
 
+.lock-icon {
+  width: 50px;
+  height: 50px;
+  background: url('https://img.icons8.com/fluency/48/private2.png') center/cover no-repeat;
+  margin: 20px auto;
+  animation: pulseLock 1.5s infinite; 
+}
+
+/* Additional styles */
 .background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #6e3ca5;
+  background: linear-gradient(135deg, #5a3f95, #8348af);
 }
 
 .content {
-    position: relative;
-    z-index: 1;
-    background-color: #333; /* Cor de fundo do conteúdo */
-    padding: 51px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(25, 62, 212, 0.1);
-    text-align: center;
-    padding-left: 33px;
-    cursor: pointer!important;
+  position: relative;
+  background: #fff;
+  padding: 40px 60px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 320px;
 }
 
 .title {
-  margin-bottom: 20px;
-  color: #bcadcd;
-}
-
-.lock {
-  width: 100px;
-  height: 100px;
-  background: url('https://img.icons8.com/fluency/48/private2.png') center/cover no-repeat; 
-  margin: 0 auto 20px;
-  
-}
-
-.animateLock {
-  animation: pulseLock 2s infinite; /* animation */
-}
-
-@keyframes pulseLock {
-  0% {
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(0.9);
-  }
+  font-family: 'Poppins', sans-serif;
+  color: #383d41;
+  margin-bottom: 25px;
+  font-size: 22px;
 }
 
 .input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #6A11CB; 
-  border-radius: 4px;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s;
 }
 
-.input.active {
-  border-color: #007bff; 
+.input.active, .input:focus {
+  border-color: #5e60ce;
 }
 
 .validation-message {
-  color: #ff4444;
-  margin-bottom: 10px;
+  color: #d9534f;
+  margin-bottom: 15px;
 }
 
 .button {
   width: 100%;
-  padding: 10px;
-  background-color: #6A11CB; 
-  color: #fff; 
+  padding: 12px;
+  background-color: #6e3ca5;
+  color: #fff;
+  font-weight: 500;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .button:hover {
-  background-color: #4F0AC9; 
+  background-color: #5e60ce;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .back-link {
   display: block;
-  margin-top: 10px;
-  color:#f5ebff;
+  margin-top: 15px;
+  color: #6e3ca5;
   text-decoration: none;
 }
 
 .back-link:hover {
   text-decoration: underline;
-  color: #d529c1; 
+  color: #5e60ce;
 }
+.reset-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  padding: 20px; 
+  box-sizing: border-box; 
+}
+
 </style>
