@@ -1,17 +1,18 @@
 <template>
-  <div class="login-container">
-    <div class="background"></div>
-    <div class="content">
-      <h2 class="login-title">Access your account</h2>
-      <img :src="Logo" alt="Logomarca" class="login-logo">
-      <div class="login-overlay"></div>
-      <form @submit.prevent="login" class="login-form">
-        <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail">
-        <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password">
-        <div v-if="passwordValidationMessage" class="validation-message">{{ passwordValidationMessage }}</div>
-        <button type="submit" class="login-button">Login</button>
-        <a href="#" @click="redirectToForgotPassword" class="forgot-password">Forgot your password?</a>
-        <button type="button" @click="createAccount" class="button-account">Create Account</button>
+  <div class="signup-container">
+    <div class="signup-background"></div>
+    <div class="signup-content">
+      <h2 class="signup-title">Create a New Account</h2>
+      <img :src="Logo" alt="Logomarca" class="signup-logo">
+      <div class="signup-overlay"></div>
+      <form @submit.prevent="createAccount" class="signup-form">
+        <input type="text" v-model="fullName" class="signup-input" :class="{ 'active': fullName }" placeholder="Full Name">
+        <input type="email" v-model="email" class="signup-input" :class="{ 'active': email }" placeholder="Email Address">
+        <input type="password" v-model="password" class="signup-input" :class="{ 'active': password }" placeholder="Password">
+        <input type="password" v-model="confirmPassword" class="signup-input" :class="{ 'active': confirmPassword }" placeholder="Confirm Password">
+        <div v-if="passwordMismatch" class="validation-message">Passwords do not match.</div>
+        <button type="submit" class="signup-button">Create Account</button>
+        <a href="#" @click="goBack" class="forgot-password">Back to Login</a>
       </form>
     </div>
   </div>
@@ -21,56 +22,60 @@
 import Logo from '@/assets/logo.png';
 
 export default {
-  name: 'LoginForm',
+  name: 'CreateAccountForm',
   data() {
     return {
-      username: '',
+      fullName: '',
+      email: '',
       password: '',
-      Logo: Logo 
+      confirmPassword: '',
+      Logo: Logo
     };
   },
   computed: {
-    passwordValidationMessage() {
-      if (this.password.length > 0 && this.password.length < 6) {
-        return 'Password must be at least 6 characters long.';
-      }
-      return '';
+    passwordMismatch() {
+      return this.password !== this.confirmPassword && this.confirmPassword.length > 0;
     }
   },
   methods: {
     createAccount() {
-      this.$router.push({ name: 'signup' });
-      console.log('Navigating to signup page');
-    },
-    login() {
-      if (!this.passwordValidationMessage) {
-        console.log('Login successful:', this.username);
+      if (this.password === this.confirmPassword) {
+        // Implement logic to create a new account
+        console.log('New account created with:', {
+          fullName: this.fullName,
+          email: this.email,
+          password: this.password
+        });
+        alert('Your account has been created successfully!');
+        // Redirect to the login page
+        this.$router.push({ name: 'login' });
       } else {
-        alert('Please correct the errors before submitting.');
+        alert('Please make sure your passwords match.');
       }
     },
-    // Reset Password
-    redirectToForgotPassword() {
-      this.$router.push({ name: 'forgotpassword' });
-      console.log('Navigating to forgot password page');
+    goBack() {
+      // Navigate back to the login page
+      this.$router.push({ name: 'login' });
+      console.log('Navigating back to login page');
     }
   }
 }
 </script>
 
 <style scoped>
+/* Styles for the signup page */
 body {
   font-family: 'Roboto', sans-serif; 
 }
 
-.login-container {
+.signup-container {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
 }
 
-.background {
+.signup-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -82,35 +87,23 @@ body {
   z-index: -1;
 }
 
-.content {
+.signup-content {
   position: relative;
   z-index: 1;
 }
 
-.login-overlay {
-   position: absolute;
-    top: 2px;
-    left: 437px;
-    width: 35%;
-    height: 108%;
-    background-color: rgba(255, 255, 255, 0.5);
-    z-index: -1;
-    border-radius: 50px;
+.signup-overlay {
+  position: absolute;
+  top: 2px;
+  left: 437px;
+  width: 35%;
+  height: 97%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: -1;
+  border-radius: 50px;
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.login-title {
+.signup-title {
   font-family: 'Poppins', sans-serif;
   color: #652ed4;
   text-align: center;
@@ -121,7 +114,7 @@ body {
   text-shadow: 1px 1px 3px rgba(233, 230, 230, 0.6);
 }
 
-.login-logo {
+.signup-logo {
   margin-top: 35px;
   width: 200px;
   height: auto;
@@ -130,13 +123,13 @@ body {
   margin-right: auto;
 }
 
-.login-form {
+.signup-form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.login-input {
+.signup-input {
   font-family: 'Roboto', sans-serif;
   padding: 12px;
   margin-bottom: 20px;
@@ -151,20 +144,20 @@ body {
   transform: scale(1);
 }
 
-.login-input:hover {
+.signup-input:hover {
   transform: scale(1.05);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.login-input.active::placeholder {
+.signup-input.active::placeholder {
   color: transparent;
 }
 
-.login-input:focus::placeholder {
+.signup-input:focus::placeholder {
   color: #555;
 }
 
-.login-input:focus {
+.signup-input:focus {
   outline: none;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -192,7 +185,7 @@ body {
   color: #321194;
 }
 
-.login-button {
+.signup-button {
   font-family: 'Roboto', sans-serif;
   padding: 15px 138px;
   border: none;
@@ -204,10 +197,9 @@ body {
   font-size: 18px;
 }
 
-.login-button:hover {
+.signup-button:hover {
   background-color: #6A11CB;
 }
-
 
 .button-account {
   font-family: 'Roboto', sans-serif;
@@ -224,4 +216,5 @@ body {
 .button-account:hover {
   background-color: #bf6cbc;
 }
+
 </style>
