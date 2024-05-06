@@ -8,6 +8,8 @@
       <form @submit.prevent="login" class="login-form">
         <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail">
         <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password">
+        <!-- Link para recuperação de senha -->
+        <a href="#" class="forgot-password">Forgot your password?</a>
         <button type="submit" class="login-button">Entrar</button>
       </form>
     </div>
@@ -37,6 +39,10 @@ export default {
 </script>
 
 <style scoped>
+
+body {
+  font-family: 'Roboto', sans-serif; 
+}
 .login-container {
   position: relative;
   width: 100%;
@@ -50,7 +56,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(120deg, #6A11CB, #2575FC);
+  background: linear-gradient(120deg, #6A11CB, #2575FC, #e53ee8);
   background-size: 200% 200%;
   animation: gradient 10s ease infinite;
   z-index: -1;
@@ -85,11 +91,12 @@ export default {
 }
 
 .login-title {
+  font-family: 'Poppins', sans-serif;
   color: #fff;
   text-align: center;
   font-size: 24px;
   margin-bottom: 30px;
-      display: none;
+  display: none;
 }
 
 .login-logo {
@@ -108,6 +115,7 @@ export default {
 }
 
 .login-input {
+  font-family: 'Roboto', sans-serif;
   padding: 12px;
   margin-bottom: 20px;
   border-radius: 8px;
@@ -120,10 +128,12 @@ export default {
   transition: transform 0.3s ease, box-shadow 0.3s ease; 
   transform: scale(1);
 }
+
 .login-input:hover {
   transform: scale(1.05); 
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2)
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
+
 .login-input.active::placeholder {
   color: transparent; 
 }
@@ -137,7 +147,22 @@ export default {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.forgot-password {
+  font-family: 'Roboto', sans-serif;
+  display: block;
+  color: #060505;
+  text-align: center;
+  margin: 10px 0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #321194;
+}
+
 .login-button {
+  font-family: 'Roboto', sans-serif;
   padding: 12px 24px;
   border: none;
   background-color: #4F0AC9;
