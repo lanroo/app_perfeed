@@ -186,6 +186,7 @@ body {
   text-decoration: none;
   transition: color 0.3s ease;
   padding-bottom: 10px;
+  cursor: pointer;
 }
 
 .forgot-password:hover {
