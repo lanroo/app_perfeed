@@ -116,9 +116,14 @@ export default {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
   font-size: 16px;
-  color: #555; 
+  color: #555;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  transform: scale(1);
 }
-
+.login-input:hover {
+  transform: scale(1.05); 
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2)
+}
 .login-input.active::placeholder {
   color: transparent; 
 }
