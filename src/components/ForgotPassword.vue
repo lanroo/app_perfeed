@@ -58,9 +58,9 @@ export default {
     }
   },
   mounted() {
-    const lock = document.querySelector('.lock');
-    lock.classList.add('animateLock');
-  }
+    // const lock = document.querySelector('.lock');
+    // lock.classList.add('animateLock');
+}
 }
 </script>
 
