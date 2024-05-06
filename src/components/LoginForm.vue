@@ -4,13 +4,14 @@
     <div class="content">
       <h2 class="login-title">Access your account</h2>
       <img :src="Logo" alt="Logomarca" class="login-logo">
-      <div class="login-overlay"></div> <!-- Camada retangular -->
+      <div class="login-overlay"></div> 
       <form @submit.prevent="login" class="login-form">
         <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail">
         <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password">
-        <!-- Link para recuperação de senha -->
-        <a href="#" class="forgot-password">Forgot your password?</a>
+        <div v-if="passwordValidationMessage" class="validation-message">{{ passwordValidationMessage }}</div>
         <button type="submit" class="login-button">Entrar</button>
+        <a href="#" class="forgot-password">Forgot your password?</a>
+        <button type="submit" class="button-account">Create Account</button>
       </form>
     </div>
   </div>
@@ -28,21 +29,32 @@ export default {
       Logo: Logo 
     };
   },
+computed: {
+  passwordValidationMessage() {
+    if (this.password.length > 0 && this.password.length < 6) {
+      return 'Password must be at least 6 characters long.';
+    }
+    return '';
+  }
+},
+
   methods: {
     login() {
-      // Lógica de login aqui
-      console.log('Usuário:', this.username);
-      console.log('Senha:', this.password);
+      if (!this.passwordValidationMessage) {
+        console.log('Login successful:', this.username);
+      } else {
+        alert('Please correct the errors before submitting.');
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
 body {
   font-family: 'Roboto', sans-serif; 
 }
+
 .login-container {
   position: relative;
   width: 100%;
@@ -69,10 +81,10 @@ body {
 
 .login-overlay {
     position: absolute;
-    top: 0px;
+    top: -9px;
     left: 437px;
     width: 35%;
-    height: 123%;
+    height: 114%;
     background-color: rgba(255, 255, 255, 0.5);
     z-index: -1;
     border-radius: 50px;
@@ -94,16 +106,18 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #fff;
   text-align: center;
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 30px;
-  display: none;
+  display: block;
+  padding-top: 23px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .login-logo {
   margin-top: 35px;
-  width: 200px; 
-  height: auto; 
-  display: block; 
+  width: 200px;
+  height: auto;
+  display: block;
   margin-left: auto;
   margin-right: auto;
 }
@@ -125,21 +139,21 @@ body {
   width: 300px;
   font-size: 16px;
   color: #555;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   transform: scale(1);
 }
 
 .login-input:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .login-input.active::placeholder {
-  color: transparent; 
+  color: transparent;
 }
 
 .login-input:focus::placeholder {
-  color: #555; 
+  color: #555;
 }
 
 .login-input:focus {
@@ -147,14 +161,23 @@ body {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.validation-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
 .forgot-password {
   font-family: 'Roboto', sans-serif;
   display: block;
   color: #060505;
   text-align: center;
-  margin: 10px 0;
+  margin: 17px 4px;
   text-decoration: none;
   transition: color 0.3s ease;
+  padding-bottom: 10px;
 }
 
 .forgot-password:hover {
@@ -163,7 +186,7 @@ body {
 
 .login-button {
   font-family: 'Roboto', sans-serif;
-  padding: 12px 24px;
+  padding: 15px 138px;
   border: none;
   background-color: #4F0AC9;
   color: #fff;
@@ -171,10 +194,26 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-size: 18px;
-  margin-top: 6%;
 }
 
 .login-button:hover {
   background-color: #6A11CB;
+}
+
+
+.button-account {
+  font-family: 'Roboto', sans-serif;
+  padding: 15px 50px;
+  border: none;
+  background-color: #0ac927;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 18px;
+}
+
+.button-account:hover {
+  background-color: #085428;
 }
 </style>
