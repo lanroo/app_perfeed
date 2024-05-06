@@ -104,13 +104,13 @@ body {
 
 .login-title {
   font-family: 'Poppins', sans-serif;
-  color: #fff;
+  color: #652ed4;
   text-align: center;
   font-size: 28px;
   margin-bottom: 30px;
   display: block;
   padding-top: 23px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 3px rgba(233, 230, 230, 0.6);
 }
 
 .login-logo {
@@ -205,7 +205,7 @@ body {
   font-family: 'Roboto', sans-serif;
   padding: 15px 50px;
   border: none;
-  background-color: #0ac927;
+  background-color: #af2aca;
   color: #fff;
   border-radius: 8px;
   cursor: pointer;
@@ -214,6 +214,6 @@ body {
 }
 
 .button-account:hover {
-  background-color: #085428;
+  background-color: #bf6cbc;
 }
 </style>
