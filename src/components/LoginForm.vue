@@ -80,11 +80,11 @@ body {
 }
 
 .login-overlay {
-    position: absolute;
-    top: -9px;
+   position: absolute;
+    top: 2px;
     left: 437px;
     width: 35%;
-    height: 114%;
+    height: 108%;
     background-color: rgba(255, 255, 255, 0.5);
     z-index: -1;
     border-radius: 50px;
