@@ -3,16 +3,15 @@
     <div class="signup-background"></div>
     <div class="signup-content">
       <h2 class="signup-title">Create a New Account</h2>
-      <img :src="Logo" alt="Logomarca" class="signup-logo">
-      <div class="signup-overlay"></div>
+      <img :src="Logo" alt="Logo" class="signup-logo">
       <form @submit.prevent="createAccount" class="signup-form">
-        <input type="text" v-model="fullName" class="signup-input" :class="{ 'active': fullName }" placeholder="Full Name">
-        <input type="email" v-model="email" class="signup-input" :class="{ 'active': email }" placeholder="Email Address">
-        <input type="password" v-model="password" class="signup-input" :class="{ 'active': password }" placeholder="Password">
-        <input type="password" v-model="confirmPassword" class="signup-input" :class="{ 'active': confirmPassword }" placeholder="Confirm Password">
-        <div v-if="passwordMismatch" class="validation-message">Passwords do not match.</div>
+        <input type="text" v-model.trim="fullName" placeholder="Full Name" class="signup-input" required>
+        <input type="email" v-model.trim="email" placeholder="Email Address" class="signup-input" required>
+        <input type="password" v-model="password" placeholder="Password" class="signup-input" required>
+        <input type="password" v-model="confirmPassword" placeholder="Confirm Password" class="signup-input" required>
+        <p v-if="passwordMismatch" class="validation-message">Passwords do not match.</p>
         <button type="submit" class="signup-button">Create Account</button>
-        <a href="#" @click="goBack" class="forgot-password">Back to Login</a>
+        <a href="#" @click="goBack" class="login-link">Back to Login</a>
       </form>
     </div>
   </div>
@@ -34,45 +33,43 @@ export default {
   },
   computed: {
     passwordMismatch() {
-      return this.password !== this.confirmPassword && this.confirmPassword.length > 0;
+      return this.password !== this.confirmPassword && this.confirmPassword;
     }
   },
   methods: {
     createAccount() {
-      if (this.password === this.confirmPassword) {
-        // Implement logic to create a new account
+      if (!this.passwordMismatch) {
         console.log('New account created with:', {
           fullName: this.fullName,
           email: this.email,
           password: this.password
         });
         alert('Your account has been created successfully!');
-        // Redirect to the login page
         this.$router.push({ name: 'login' });
       } else {
         alert('Please make sure your passwords match.');
       }
     },
     goBack() {
-      // Navigate back to the login page
       this.$router.push({ name: 'login' });
       console.log('Navigating back to login page');
     }
   }
 }
 </script>
-
 <style scoped>
-/* Styles for the signup page */
 body {
-  font-family: 'Roboto', sans-serif; 
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f9;
 }
 
 .signup-container {
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .signup-background {
@@ -81,46 +78,34 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(120deg, #6A11CB, #2575FC, #e53ee8);
-  background-size: 200% 200%;
-  animation: gradient 10s ease infinite;
+  background: linear-gradient(135deg, #5e60ce, #6930c3);
+  background-size: cover;
   z-index: -1;
 }
 
 .signup-content {
   position: relative;
+  width: 380px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.47);
   z-index: 1;
-}
-
-.signup-overlay {
-  position: absolute;
-  top: 2px;
-  left: 437px;
-  width: 35%;
-  height: 97%;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: -1;
-  border-radius: 50px;
 }
 
 .signup-title {
   font-family: 'Poppins', sans-serif;
-  color: #652ed4;
+  color: #383d41;
   text-align: center;
-  font-size: 28px;
-  margin-bottom: 30px;
-  display: block;
-  padding-top: 23px;
-  text-shadow: 1px 1px 3px rgba(233, 230, 230, 0.6);
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .signup-logo {
-  margin-top: 35px;
-  width: 200px;
+  width: 100px;
   height: auto;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px auto 30px;
 }
 
 .signup-form {
@@ -130,91 +115,62 @@ body {
 }
 
 .signup-input {
-  font-family: 'Roboto', sans-serif;
-  padding: 12px;
-  margin-bottom: 20px;
+  padding: 12px 20px;
+  margin-bottom: 15px;
   border-radius: 8px;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 100%;
   font-size: 16px;
-  color: #555;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  transform: scale(1);
+  color: #333;
+  transition: width 0.3s ease, box-shadow 0.3s ease;
 }
 
 .signup-input:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.signup-input.active::placeholder {
-  color: transparent;
-}
-
-.signup-input:focus::placeholder {
-  color: #555;
+  width: 105%; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .signup-input:focus {
+  border-color: #5e60ce;
+  box-shadow: 0 0 8px rgba(94, 96, 206, 0.5);
   outline: none;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .validation-message {
-  color: red;
+  color: #e63946;
   font-size: 14px;
-  margin-top: -10px;
   margin-bottom: 10px;
-  word-break: break-all;
-}
-
-.forgot-password {
-  font-family: 'Roboto', sans-serif;
-  display: block;
-  color: #060505;
-  text-align: center;
-  margin: 17px 4px;
-  text-decoration: none;
-  transition: color 0.3s ease;
-  padding-bottom: 10px;
-}
-
-.forgot-password:hover {
-  color: #321194;
 }
 
 .signup-button {
-  font-family: 'Roboto', sans-serif;
-  padding: 15px 138px;
+  padding: 10px 50px;
+  background-color: #6930c3;
+  color: white;
+  font-size: 16px;
   border: none;
-  background-color: #4F0AC9;
-  color: #fff;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 18px;
+  transition: background 0.3s;
 }
 
 .signup-button:hover {
-  background-color: #6A11CB;
+  background-color: #5e60ce;
 }
 
-.button-account {
-  font-family: 'Roboto', sans-serif;
-  padding: 15px 50px;
-  border: none;
-  background-color: #af2aca;
-  color: #fff;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 18px;
+.login-link {
+  color: #4A4A4A;
+  text-align: center;
+  margin-top: 10px;
+  text-decoration: none;
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s;
 }
 
-.button-account:hover {
-  background-color: #bf6cbc;
+.login-link:hover {
+  background-color: #f8f9fa;
+  border-color: #bdbdbd;
 }
-
 </style>
