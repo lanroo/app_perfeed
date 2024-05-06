@@ -8,63 +8,50 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item" @click="goToHome">
-            Início
-          </a>
+          <a class="navbar-item" @click="goToHome">Início</a>
+        </div>
+        <!-- Ícone do usuário e menu suspenso -->
+        <div class="navbar-end">
+          <div class="user-menu">
+            <img src="https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284" alt="User Image" class="user-image" @click="toggleUserMenu">
+            <div v-if="isUserMenuOpen" class="dropdown">
+              <a class="dropdown-item" href="#">Perfil</a>
+              <a class="dropdown-item" href="#">Configurações e privacidade</a>
+              <a class="dropdown-item" href="#">Ajuda e suporte</a>
+              <a class="dropdown-item" href="#">Sair</a>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
 
     <div class="feed-container">
       <h1>Feed</h1>
-
       <div class="comment-box">
-        <textarea
-          v-model="newPostContent"
-          placeholder="No que você está pensando?"
-          class="comment-input"
-          @focus="expandTextarea"
-          @input="expandTextarea"
-        ></textarea>
+        <textarea v-model="newPostContent" placeholder="No que você está pensando?" class="comment-input" @focus="expandTextarea" @input="expandTextarea"></textarea>
         <button @click="createPost" class="comment-button">Postar</button>
       </div>
 
-  
       <div class="post-list">
         <div v-for="post in visiblePosts" :key="post.id" class="post">
-        
           <div class="user-info">
             <img :src="post.userImage" alt="User Image" class="user-image">
             <div class="user-details">
               <span class="user-name">{{ post.userName }}</span>
               <span class="post-timestamp">{{ post.timestamp }}</span>
             </div>
-          
-           <span v-if="post.userName === 'Lanna Almeida'" class="edit-buttons">
-              <button @click="editPost(post)" class="icon-button">
-                <i class="fas fa-pencil-alt"></i>
-              </button>
-              <button @click="deletePost(post)" class="icon-button">
-                <i class="fas fa-trash"></i>
-              </button>
+            <span v-if="post.userName === 'Lanna Almeida'" class="edit-buttons">
+              <button @click="editPost(post)" class="icon-button"><i class="fas fa-pencil-alt"></i></button>
+              <button @click="deletePost(post)" class="icon-button"><i class="fas fa-trash"></i></button>
             </span>
-
-
           </div>
-          
-          <p>{{ post.content }}</p>        
+          <p>{{ post.content }}</p>
           <img v-if="post.image" :src="post.image" alt="Post Image">
           <div class="post-actions">
-            <button @click="toggleLike(post)" class="action-button">
-              <i :class="['fas', post.liked ? 'fa-heart' : 'far fa-heart']"></i>
-              {{ post.likes }}
-            </button>
-            <button @click="sharePost(post)" class="action-button">
-              <i class="fas fa-share"></i> Compartilhar
-            </button>
+            <button @click="toggleLike(post)" class="action-button"><i :class="['fas', post.liked ? 'fa-heart' : 'far fa-heart']"></i>{{ post.likes }}</button>
+            <button @click="sharePost(post)" class="action-button"><i class="fas fa-share"></i> Compartilhar</button>
             <span class="shares-count">{{ post.shares }} Compartilhamentos</span>
           </div>
-      
           <div v-if="post.comments && post.comments.length > 0">
             <h3>Comentários:</h3>
             <ul>
@@ -73,7 +60,6 @@
           </div>
         </div>
       </div>
-      
       <div v-if="loading" class="loading">Carregando...</div>
     </div>
 
@@ -100,6 +86,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -135,6 +122,8 @@ export default {
     
     this.loadMorePosts();
   },
+  
+  
   methods: {
     generateRandomTimestamp() {
       const months = [
@@ -483,6 +472,46 @@ span.edit-buttons {
 .icon-button i {
   color: #140841;
   font-size: 16px; 
+}
+.navbar-end {
+  display: flex;
+  align-items: center;
+}
+
+.user-menu {
+  position: absolute;
+  margin-left: 88%;
+  margin-bottom: 4%;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 50px; 
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  z-index: 1000; 
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
 }
 
 
