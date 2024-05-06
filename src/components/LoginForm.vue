@@ -119,6 +119,7 @@ body {
   display: block;
   padding-top: 23px;
   text-shadow: 1px 1px 3px rgba(233, 230, 230, 0.6);
+  display: none;
 }
 
 .login-logo {
