@@ -4,17 +4,17 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginForm from '@/components/LoginForm';
 import SignupForm from '@/components/SignupForm';
 import ForgotPassword from '@/components/ForgotPassword';
-import FeedView from '@/components/Feed/FeedView'; 
+import FeedView from '@/components/Feed/FeedView';
 
 const routes = [
   {
     path: '/',
-    redirect: '/feed' 
+    redirect: '/feed'
   },
   {
-    path: '/feed', 
+    path: '/feed',
     name: 'feed',
-    component: FeedView 
+    component: FeedView
   },
   {
     path: '/login',
@@ -26,7 +26,7 @@ const routes = [
     name: 'signup',
     component: SignupForm
   },
-  { 
+  {
     path: '/forgot-password',
     name: 'forgotpassword',
     component: ForgotPassword
