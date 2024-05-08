@@ -2,15 +2,12 @@
   <div>
     <nav class="navbar">
       <div class="navbar-brand">
-        <span class="navbar-item">
-          Perfeed
-        </span>
+        <span class="navbar-item">Perfeed</span>
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
           <a class="navbar-item" @click="goToHome">Início</a>
         </div>
-        <!-- Ícone do usuário e menu suspenso -->
         <div class="navbar-end">
           <div class="user-menu">
             <img src="https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284" alt="User Image" class="user-image" @click="toggleUserMenu">
@@ -81,17 +78,17 @@
         <div class="modal-buttons">
           <button @click="cancelDelete" class="modal-cancel-button">Cancelar</button>
           <button @click="confirmDelete" class="modal-delete-button">Excluir</button>
+
         </div>
       </div>
     </div>
   </div>
 </template>
-
-
 <script>
 export default {
   data() {
     return {
+      isUserMenuOpen: false,
       posts: [
         {
           id: 1,
@@ -103,7 +100,7 @@ export default {
           liked: true,
           likes: 15,
           shares: 3,
-          image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg', 
+          image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
           timestamp: this.generateRandomTimestamp()
         },
         
@@ -115,27 +112,25 @@ export default {
       showDeleteModal: false,
       editedPostContent: '',
       postToDelete: null,
-      postToEdit: null 
+      postToEdit: null
     };
   },
   created() {
-    
     this.loadMorePosts();
   },
-  
-  
   methods: {
+    toggleUserMenu() {
+      this.isUserMenuOpen = !this.isUserMenuOpen; // Alterna a visibilidade do menu do usuário
+    },
     generateRandomTimestamp() {
       const months = [
         'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
         'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
       ];
-      
-      const day = Math.floor(Math.random() * 30) + 1; 
-      const month = months[Math.floor(Math.random() * months.length)]; 
-      const hour = Math.floor(Math.random() * 24); 
-      const minute = Math.floor(Math.random() * 60); 
-      
+      const day = Math.floor(Math.random() * 30) + 1;
+      const month = months[Math.floor(Math.random() * months.length)];
+      const hour = Math.floor(Math.random() * 24);
+      const minute = Math.floor(Math.random() * 60);
       return `${day} de ${month} às ${hour}:${minute < 10 ? '0' + minute : minute}`;
     },
     goToHome() {
@@ -160,7 +155,6 @@ export default {
     },
     loadMorePosts() {
       this.loading = true;
-      
       setTimeout(() => {
         const startIndex = this.visiblePosts.length;
         const endIndex = startIndex + 5;
@@ -169,12 +163,11 @@ export default {
       }, 1000);
     },
     createPost() {
-      
       if (this.newPostContent.trim() !== '') {
         const newPost = {
           id: Date.now(),
-          userName: 'Lanna Almeida', 
-          userImage: 'https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284', // Sua foto
+          userName: 'Lanna Almeida',
+          userImage: 'https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284',
           title: 'Nova Postagem',
           content: this.newPostContent,
           comment: '',
@@ -182,29 +175,29 @@ export default {
           liked: false,
           likes: 0,
           shares: 0,
-          image: null, 
+          image: null,
           timestamp: this.generateRandomTimestamp()
         };
-        this.posts.unshift(newPost); 
+        this.posts.unshift(newPost);
         this.newPostContent = '';
         this.visiblePosts.unshift(newPost);
       }
     },
     editPost(post) {
-      this.postToEdit = post; 
+      this.postToEdit = post;
       this.editedPostContent = post.content;
       this.showEditModal = true;
     },
     saveEdit() {
-      if (this.postToEdit) { 
+      if (this.postToEdit) {
         this.postToEdit.content = this.editedPostContent;
         this.showEditModal = false;
-        this.postToEdit = null; 
+        this.postToEdit = null;
       }
     },
     cancelEdit() {
       this.showEditModal = false;
-      this.postToEdit = null; 
+      this.postToEdit = null;
     },
     deletePost(post) {
       this.postToDelete = post;
@@ -223,8 +216,8 @@ export default {
     }
   }
 };
-
 </script>
+
 
 <style scoped>
 
@@ -265,9 +258,9 @@ h1 {
   padding: 10px 20px;
   width: 100%;
   position: fixed; 
-  top: 0; 
+  top: 0;
   left: 0;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .navbar-brand {
@@ -366,11 +359,13 @@ h1 {
 }
 
 .user-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 40%;
   margin-right: 10px;
+  cursor: pointer;
 }
+
 
 .user-name {
   font-weight: bold;
@@ -482,25 +477,24 @@ span.edit-buttons {
   position: absolute;
   margin-left: 88%;
   margin-bottom: 4%;
-}
-
-.user-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  align-self: center;
   cursor: pointer;
 }
+
+
+
 .dropdown {
   position: absolute;
   right: 0;
-  top: 50px; 
   background-color: #fff;
   border: 1px solid #ccc;
+  top: 48px;
   border-radius: 5px;
   width: 200px;
-  z-index: 1000; 
-  display: block;
+  display: none; 
+  z-index: 1050;
 }
+
 
 .dropdown-item {
   display: block;

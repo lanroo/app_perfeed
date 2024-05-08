@@ -20,6 +20,7 @@
 <script>
 import Logo from '@/assets/logo.png';
 
+
 export default {
   name: 'CreateAccountForm',
   data() {
@@ -64,16 +65,17 @@ body {
 }
 
 .signup-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 122vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+
 .signup-background {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -84,13 +86,14 @@ body {
 }
 
 .signup-content {
-  position: relative;
-  width: 380px;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.47);
-  z-index: 1;
+    position: fixed;
+    width: 380px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.47);
+    z-index: 1;
+    margin-bottom: 11%;
 }
 
 .signup-title {

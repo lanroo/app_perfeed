@@ -40,7 +40,7 @@
               <span class="user-name">{{ post.userName }}</span>
               <span class="post-timestamp">{{ post.timestamp }}</span>
             </div>
-            <!-- Editar e excluir post (seu post) -->
+            
             <span v-if="post.userName === 'Lanna Almeida'" class="edit-buttons">
               <button @click="editPost(post)">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA6ElEQVR4nO2VOw7CMAxAOQxiY+vAhA0IMbDSOAOX6MQIE3Cq2sAR2OEEICZWUCSqllZQhsZSRZ/kJYnyZDufVquhzgDbCNlcUegIbAMlKa1Q6JEECN2ATU9V+i63gbr4FUdv4m9yYLpULnJRJge2UaXSdGOzzc6h0CIVm6UXaaachczzY94OUT5zrZP78CKHH6QqPcVGWhXwN+XF2Exe/2nJtanwcUgADufqUkdf7Fhd6hjtqaMm7UvYzW4MHLYHOzsEtjNkunvLFMVsPmWFsZ16kTpQzFmlj3lQ6IBMJxRau7IXFjTUkSf9xKa1VMyYvgAAAABJRU5ErkJggg==" alt="Editar">
@@ -123,10 +123,10 @@ export default {
           liked: true,
           likes: 15,
           shares: 3,
-          image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg', // Imagem atualizada
+          image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg', 
           timestamp: this.generateRandomTimestamp()
         },
-        // Outros posts...
+        
       ],
       visiblePosts: [],
       loading: false,
@@ -135,7 +135,7 @@ export default {
       showDeleteModal: false,
       editedPostContent: '',
       postToDelete: null,
-      postToEdit: null // Definindo postToEdit como null
+      postToEdit: null 
     };
   },
   created() {
@@ -149,7 +149,7 @@ export default {
         'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
       ];
       
-      const day = Math.floor(Math.random() * 30) + 1; // Gera um dia aleatório entre 1 e 30
+      const day = Math.floor(Math.random() * 30) + 1;
       const month = months[Math.floor(Math.random() * months.length)]; // Gera um mês aleatório
       const hour = Math.floor(Math.random() * 24); // Gera uma hora aleatória entre 0 e 23
       const minute = Math.floor(Math.random() * 60); // Gera um minuto aleatório entre 0 e 59
@@ -178,7 +178,7 @@ export default {
     },
     loadMorePosts() {
       this.loading = true;
-      // Simulação de carregamento de mais posts (após 1 segundo)
+     
       setTimeout(() => {
         const startIndex = this.visiblePosts.length;
         const endIndex = startIndex + 5;
@@ -187,11 +187,11 @@ export default {
       }, 1000);
     },
     createPost() {
-      // Adicionando um novo post com o conteúdo digitado
+      
       if (this.newPostContent.trim() !== '') {
         const newPost = {
           id: Date.now(),
-          userName: 'Lanna Almeida', // Seu nome
+          userName: 'Lanna Almeida', 
           userImage: 'https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284', // Sua foto
           title: 'Nova Postagem',
           content: this.newPostContent,
@@ -200,29 +200,29 @@ export default {
           liked: false,
           likes: 0,
           shares: 0,
-          image: null, // Você pode adicionar uma imagem se desejar
+          image: null, 
           timestamp: this.generateRandomTimestamp()
         };
-        this.posts.unshift(newPost); // Adiciona o novo post no início do array
-        this.newPostContent = ''; // Limpa o campo de texto
-        this.visiblePosts.unshift(newPost); // Adiciona o novo post visível no início do array
+        this.posts.unshift(newPost); 
+        this.newPostContent = ''; 
+        this.visiblePosts.unshift(newPost); 
       }
     },
     editPost(post) {
-      this.postToEdit = post; // Atualizando postToEdit
+      this.postToEdit = post; 
       this.editedPostContent = post.content;
       this.showEditModal = true;
     },
     saveEdit() {
-      if (this.postToEdit) { // Verificando se postToEdit está definido
+      if (this.postToEdit) { 
         this.postToEdit.content = this.editedPostContent;
         this.showEditModal = false;
-        this.postToEdit = null; // Resetando postToEdit
+        this.postToEdit = null; 
       }
     },
     cancelEdit() {
       this.showEditModal = false;
-      this.postToEdit = null; // Resetando postToEdit
+      this.postToEdit = null; 
     },
     deletePost(post) {
       this.postToDelete = post;
@@ -260,16 +260,16 @@ h1 {
 .post-list {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza na horizontal */
+  align-items: center; 
 }
 
 .post {
   margin-bottom: 20px;
   border: 1px solid #ccc;
-  padding: 10px; /* Reduzindo o padding */
+  padding: 10px; 
   border-radius: 10px;
-  width: 100%; /* Define a largura total */
-  max-width: 400px; /* Define a largura máxima */
+  width: 100%; 
+  max-width: 400px; 
 }
 
 .post img {
@@ -313,14 +313,14 @@ h1 {
 
 .comment-input {
   flex: 1;
-  padding: 8px; /* Reduzindo o padding */
+  padding: 8px; 
   border: 1px solid #ccc;
   border-radius: 20px;
   outline: none;
   font-size: 16px;
   resize: none;
   transition: height 0.3s ease;
-  max-width: 400px; /* Define a largura máxima */
+  max-width: 400px; 
 }
 
 .comment-input:focus {
@@ -398,23 +398,22 @@ h1 {
 }
 
 .user-details {
-  margin-right: 10px; /* Ajuste conforme necessário */
+  margin-right: 10px; 
 }
 
 .post-timestamp {
   display: block;
-  font-size: 14px; /* Ajuste conforme necessário */
-  color: #666; /* Cor do texto */
+  font-size: 14px; 
+  color: #666; 
 }
 
-/* Estilos para os modais */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com transparência */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -434,7 +433,7 @@ h1 {
 
 .modal-textarea {
   width: 100%;
-  height: 100px; /* Altura ajustável */
+  height: 100px; 
   margin-bottom: 10px;
 }
 
