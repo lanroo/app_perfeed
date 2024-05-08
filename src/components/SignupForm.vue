@@ -65,7 +65,7 @@ body {
 }
 
 .signup-container {
-    position: fixed;
+    position: relative;
     width: 100%;
     height: 122vh;
     display: flex;
@@ -86,7 +86,7 @@ body {
 }
 
 .signup-content {
-    position: fixed;
+    position: relative;
     width: 380px;
     padding: 40px;
     background: rgba(255, 255, 255, 0.85);
