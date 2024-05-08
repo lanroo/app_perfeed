@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <div class="login-overlay2">
     <div class="background"></div>
     <div class="content">
       <h2 class="login-title">Access your account</h2>
@@ -15,7 +16,9 @@
       </form>
     </div>
   </div>
+  </div>
 </template>
+
 
 <script>
 import Logo from '@/assets/logo.png';
@@ -63,11 +66,14 @@ body {
   font-family: 'Roboto', sans-serif; 
 }
 
+    
 .login-container {
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;       
+  height: 100vh;      
+  overflow: hidden;  
 }
 
 .background {
@@ -87,16 +93,21 @@ body {
   z-index: 1;
 }
 
-.login-overlay {
-    position: absolute;
-    top: 12px;
-    left: 437px;
-    width: 36%;
-    height: 118%;
+.login-overlay2 {
+    width: 36%; 
+    max-width: 400px; 
     background-color: rgba(255, 255, 255, 0.5);
-    z-index: -1;
     border-radius: 50px;
+    padding: 20px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
+@media (max-width: 600px) {
+    .login-overlay2 {
+        width: 90%; 
+        padding: 10px;
+    }
+}
+
 
 @keyframes gradient {
   0% {
