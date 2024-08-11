@@ -1,28 +1,6 @@
 <template>
   <div>
-    <nav class="navbar">
-      <div class="navbar-brand">
-        <span class="navbar-item">Perfeed</span>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item" @click="goToHome">Início</a>
-        </div>
-        <div class="navbar-end">
-            <div class="user-menu" @click="toggleUserMenu">
-            <img src="https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284" alt="User Image" class="user-image">
-            <div v-if="isUserMenuOpen" class="dropdown">
-              <a class="dropdown-item" href="#">Perfil</a>
-              <a class="dropdown-item" href="#">Configurações e privacidade</a>
-              <a class="dropdown-item" href="#">Ajuda e suporte</a>
-              <a class="dropdown-item" @click="goToLogin">Sair</a>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-
+    <AppNavbar :userProfileImage="userProfileImage" @navigate="navigate" />
     <div class="feed-container">
       <h1>Feed</h1>
       <div class="comment-box">
@@ -86,9 +64,15 @@
 </template>
 
 <script>
+import AppNavbar from '@/components/AppNavbar.vue';
+
 export default {
+  components: {
+    AppNavbar
+  },
   data() {
     return {
+      userProfileImage: 'https://randomuser.me/api/portraits/men/32.jpg',
       isUserMenuOpen: false,
       posts: [
         {
@@ -119,6 +103,9 @@ export default {
     this.loadMorePosts();
   },
   methods: {
+    navigate(route) {
+      this.$router.push(route);
+    },
     toggleUserMenu() {
       this.isUserMenuOpen = !this.isUserMenuOpen;
     },
@@ -176,7 +163,7 @@ export default {
         const newPost = {
           id: Date.now(),
           userName: 'Lanna Almeida',
-          userImage: 'https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284',
+          userImage: this.userProfileImage,
           title: 'Nova Postagem',
           content: this.newPostContent,
           comment: '',
@@ -228,109 +215,12 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
-  background-color: #140841; 
-  color: #fff;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  position: fixed; 
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-.navbar-brand {
-  font-weight: bold;
-  font-size: 24px;
-  color: #ffffff;
+.feed-container[data-v-ab293e58] {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 90px;
 }
-
-.navbar-item {
-  color: #ffffff;
-  margin-left: 20px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.navbar-item:hover {
-  color: #dddddd;
-}
-
-.navbar-menu {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-start,
-.navbar-end {
-  display: flex;
-  align-items: center;
-}
-
-.user-menu {
-  position: relative;
-  margin-left: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.user-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-  transition: transform 0.3s ease, border-color 0.3s ease;
-  margin-right: 59px;
-}
-
-.user-image[data-v-ab293e58] {
-    width: 40px;
-    height: 40px;
-    border-radius: 40%;
-    margin-right: 41px;
-    cursor: pointer;
-}
-
-.user-image:hover {
-  transform: scale(1.1);
-  border-color: #dddddd;
-}
-
-.dropdown {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  padding: 10px 0;
-  min-width: 160px;
-}
-
-.dropdown-item {
-  padding: 10px 20px;
-  color: #333;
-  text-decoration: none;
-  display: block;
-  transition: background-color 0.3s ease;
-}
-
-.dropdown-item:hover {
-  background-color: #f0f0f0;
-}
-
-h1 {
-  margin-top: 8%;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  margin-left: 24%;
-}
-
 .feed-container {
   max-width: 800px;
   margin: 0 auto;
@@ -401,6 +291,7 @@ h1 {
   margin-top: 10px;
 }
 
+
 .action-button {
   margin-right: 10px;
   padding: 8px 16px;
@@ -445,12 +336,14 @@ h1 {
   cursor: pointer;
 }
 
-
 .user-name {
   font-weight: bold;
   font-size: 18px;
   color: #333;
   font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+h1 {
+    display: none;
 }
 
 .user-details {
