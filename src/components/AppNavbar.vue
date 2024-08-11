@@ -94,8 +94,9 @@ export default {
 }
 
 .home-icon {
-  width: 24px;
+  width: 24px; 
   height: 24px;
+  filter: invert(100%); 
 }
 
 .user-menu {
