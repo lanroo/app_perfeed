@@ -9,8 +9,11 @@
           <a class="navbar-item" @click="goToHome">Início</a>
         </div>
         <div class="navbar-end">
-          <div class="user-menu">
-            <img src="https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284" alt="User Image" class="user-image" @click="toggleUserMenu">
+          <a class="navbar-item" @click="goToLogin">Login</a>
+          <a class="navbar-item" @click="goToSignup">Cadastro</a>
+          <a class="navbar-item" @click="goToForgotPassword">Esqueci a Senha</a>
+          <div class="user-menu" @click="toggleUserMenu">
+            <img src="https://scontent.fbel1-1.fna.fbcdn.net/v/t39.30808-6/397194225_6116207795147875_3350928849902618526_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=2Ywj54siZYcQ7kNvgFiMhHI&_nc_ht=scontent.fbel1-1.fna&cb_e2o_trans=q&oh=00_AfCwgJ2pI8XYrmjp8jNNHoGgXgFXhI70JuZ3FmpGVo9rFg&oe=663F0284" alt="User Image" class="user-image">
             <div v-if="isUserMenuOpen" class="dropdown">
               <a class="dropdown-item" href="#">Perfil</a>
               <a class="dropdown-item" href="#">Configurações e privacidade</a>
@@ -78,12 +81,12 @@
         <div class="modal-buttons">
           <button @click="cancelDelete" class="modal-cancel-button">Cancelar</button>
           <button @click="confirmDelete" class="modal-delete-button">Excluir</button>
-
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -103,7 +106,6 @@ export default {
           image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
           timestamp: this.generateRandomTimestamp()
         },
-        
       ],
       visiblePosts: [],
       loading: false,
@@ -120,7 +122,7 @@ export default {
   },
   methods: {
     toggleUserMenu() {
-      this.isUserMenuOpen = !this.isUserMenuOpen; // Alterna a visibilidade do menu do usuário
+      this.isUserMenuOpen = !this.isUserMenuOpen;
     },
     generateRandomTimestamp() {
       const months = [
@@ -135,6 +137,15 @@ export default {
     },
     goToHome() {
       this.$router.push({ name: 'feed' });
+    },
+    goToLogin() {
+      this.$router.push({ name: 'login' });
+    },
+    goToSignup() {
+      this.$router.push({ name: 'signup' });
+    },
+    goToForgotPassword() {
+      this.$router.push({ name: 'forgotpassword' });
     },
     addComment(post) {
       if (post.comment.trim() !== '') {
@@ -218,14 +229,101 @@ export default {
 };
 </script>
 
-
 <style scoped>
+.navbar {
+  background-color: #140841; 
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.navbar-item {
+  color: #ffffff;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navbar-item:hover {
+  color: #dddddd;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-start,
+.navbar-end {
+  display: flex;
+  align-items: center;
+}
+
+.user-menu {
+  position: relative;
+  margin-left: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.user-image:hover {
+  transform: scale(1.1);
+  border-color: #dddddd;
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px 0;
+  min-width: 160px;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
 
 h1 {
   margin-top: 8%;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   margin-left: 24%;
 }
+
 .feed-container {
   max-width: 800px;
   margin: 0 auto;
@@ -250,32 +348,6 @@ h1 {
 .post img {
   max-width: 100%;
   margin-top: 10px;
-}
-
-.navbar {
-  background-color: #140841; 
-  color: #fff;
-  padding: 10px 20px;
-  width: 100%;
-  position: fixed; 
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
-
-.navbar-brand {
-  font-weight: bold;
-  font-size: 24px;
-}
-
-.navbar-item {
-  color: #fff;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.navbar-item:hover {
-  text-decoration: underline;
 }
 
 .comment-box {
@@ -440,6 +512,7 @@ h1 {
   background-color: #ff4b4b;
   color: #fff;
 }
+
 .edit-buttons button {
   background: none;
   cursor: pointer;
@@ -456,8 +529,9 @@ h1 {
   padding: 5px;  
   margin-right: 3px;  
 }
+
 span.edit-buttons {
-    margin-left: 33%;
+  margin-left: 33%;
 }
 
 .icon-button:last-child {
@@ -468,45 +542,4 @@ span.edit-buttons {
   color: #140841;
   font-size: 16px; 
 }
-.navbar-end {
-  display: flex;
-  align-items: center;
-}
-
-.user-menu {
-  position: absolute;
-  margin-left: 88%;
-  margin-bottom: 4%;
-  align-self: center;
-  cursor: pointer;
-}
-
-
-
-.dropdown {
-  position: absolute;
-  right: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  top: 48px;
-  border-radius: 5px;
-  width: 200px;
-  display: none; 
-  z-index: 1050;
-}
-
-
-.dropdown-item {
-  display: block;
-  padding: 10px;
-  color: #333;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background-color: #f0f0f0;
-}
-
-
 </style>
