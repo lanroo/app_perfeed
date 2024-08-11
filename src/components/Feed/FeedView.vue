@@ -346,6 +346,18 @@ h1 {
     display: none;
 }
 
+.dropdown[data-v-1fd76d11] {
+    position: absolute;
+    top: 50px;
+    right: 28px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 10px 0;
+    min-width: 160px;
+}
+
 .user-details {
   margin-right: 10px; 
 }
