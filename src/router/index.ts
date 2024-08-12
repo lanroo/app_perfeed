@@ -1,12 +1,10 @@
-// router/index.js
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import LoginForm from '@/components/LoginForm.vue';
+import SignupForm from '@/components/SignupForm.vue';
+import ForgotPassword from '@/components/ForgotPassword.vue';
+import FeedView from '@/components/Feed/FeedView.vue'; 
 
-import { createRouter, createWebHistory } from 'vue-router';
-import LoginForm from '@/components/LoginForm';
-import SignupForm from '@/components/SignupForm';
-import ForgotPassword from '@/components/ForgotPassword';
-import FeedView from '@/components/Feed/FeedView'; 
-
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/feed' 
@@ -31,7 +29,6 @@ const routes = [
     name: 'forgotpassword',
     component: ForgotPassword
   },
-
 ];
 
 const router = createRouter({

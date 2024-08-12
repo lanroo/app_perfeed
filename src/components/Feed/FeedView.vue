@@ -357,11 +357,7 @@ h1 {
     padding: 10px 0;
     min-width: 160px;
 }
-.home-icon {
-  width: 24px; /* Ajuste o tamanho conforme necessário */
-  height: 24px;
-  filter: invert(100%); /* Isso inverte as cores, tornando o ícone branco */
-}
+
 
 .user-details {
   margin-right: 10px; 

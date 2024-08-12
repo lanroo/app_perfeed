@@ -1,19 +1,22 @@
+# Ignorar o arquivo main.js 
+src/main.js
+
+# Outras entradas do .gitignore
 .DS_Store
 node_modules
 /dist
 
-
-# local env files
+# Arquivos de ambiente locais
 .env.local
 .env.*.local
 
-# Log files
+# Arquivos de log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editor directories and files
+# Diretórios e arquivos do editor
 .idea
 .vscode
 *.suo
@@ -21,3 +24,17 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Ignorar diretórios de build e cache
+/build/
+.cache/
+.history/
+
+# Ignorar arquivos de configuração do sistema operacional
+Thumbs.db
+Desktop.ini
+
+# Ignorar arquivos de lock de pacotes (opcional)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

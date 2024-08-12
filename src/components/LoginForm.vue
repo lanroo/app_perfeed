@@ -1,24 +1,23 @@
 <template>
   <div class="login-container">
     <div class="login-overlay2">
-    <div class="background"></div>
-    <div class="content">
-      <h2 class="login-title">Access your account</h2>
-      <img :src="Logo" alt="Logomarca" class="login-logo">
-      <div class="login-overlay"></div>
-      <form @submit.prevent="login" class="login-form">
-        <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail">
-        <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password">
-        <div v-if="passwordValidationMessage" class="validation-message">{{ passwordValidationMessage }}</div>
-        <button type="submit" class="login-button">Login</button>
-        <a href="#" @click="redirectToForgotPassword" class="forgot-password">Forgot your password?</a>
-        <button type="button" @click="createAccount" class="button-account">Create Account</button>
-      </form>
+      <div class="background"></div>
+      <div class="content">
+        <h2 class="login-title">Access your account</h2>
+        <img :src="Logo" alt="Logomarca" class="login-logo">
+        <div class="login-overlay"></div>
+        <form @submit.prevent="login" class="login-form">
+          <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail">
+          <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password">
+          <div v-if="passwordValidationMessage" class="validation-message">{{ passwordValidationMessage }}</div>
+          <button type="submit" class="login-button">Login</button>
+          <a href="#" @click="redirectToForgotPassword" class="forgot-password">Forgot your password?</a>
+          <button type="button" @click="createAccount" class="button-account">Create Account</button>
+        </form>
+      </div>
     </div>
   </div>
-  </div>
 </template>
-
 
 <script>
 import Logo from '@/assets/logo.png';
@@ -43,19 +42,16 @@ export default {
   methods: {
     createAccount() {
       this.$router.push({ name: 'signup' });
-      console.log('Navigating to signup page');
     },
     login() {
       if (!this.passwordValidationMessage) {
-        console.log('Login successful:', this.username);
+        // Adicione aqui a lógica de login, se houver.
       } else {
         alert('Please correct the errors before submitting.');
       }
     },
-    // Reset Password
     redirectToForgotPassword() {
       this.$router.push({ name: 'forgotpassword' });
-      console.log('Navigating to forgot password page');
     }
   }
 }
@@ -66,7 +62,6 @@ body {
   font-family: 'Roboto', sans-serif; 
 }
 
-    
 .login-container {
   display: flex;
   justify-content: center;
@@ -94,20 +89,20 @@ body {
 }
 
 .login-overlay2 {
-    width: 36%; 
-    max-width: 400px; 
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 50px;
-    padding: 20px; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-}
-@media (max-width: 600px) {
-    .login-overlay2 {
-        width: 90%; 
-        padding: 10px;
-    }
+  width: 36%; 
+  max-width: 400px; 
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50px;
+  padding: 20px; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
 
+@media (max-width: 600px) {
+  .login-overlay2 {
+    width: 90%; 
+    padding: 10px;
+  }
+}
 
 @keyframes gradient {
   0% {
@@ -220,7 +215,6 @@ body {
 .login-button:hover {
   background-color: #6A11CB;
 }
-
 
 .button-account {
   font-family: 'Roboto', sans-serif;

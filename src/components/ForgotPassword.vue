@@ -44,7 +44,6 @@ export default {
       if (this.isValidEmail(this.email)) {
         this.isSending = true;
         setTimeout(() => {
-          console.log('Reset link sent to:', this.email);
           alert('A password reset link has been sent to your email.');
           this.isSending = false;
         }, 2000);
@@ -54,7 +53,6 @@ export default {
     },
     goBack() {
       this.$router.push({ name: 'login' });
-      console.log('Navigating back to login page');
     }
   },
   mounted() {

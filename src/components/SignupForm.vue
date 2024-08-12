@@ -53,7 +53,6 @@ export default {
     },
     goBack() {
       this.$router.push({ name: 'login' });
-      console.log('Navigating back to login page');
     }
   }
 }
