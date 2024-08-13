@@ -18,8 +18,8 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Logo from '@/assets/logo.png';
-
 
 export default {
   name: 'CreateAccountForm',
@@ -38,15 +38,20 @@ export default {
     }
   },
   methods: {
-    createAccount() {
+    async createAccount() {
       if (!this.passwordMismatch) {
-        console.log('New account created with:', {
-          fullName: this.fullName,
-          email: this.email,
-          password: this.password
-        });
-        alert('Your account has been created successfully!');
-        this.$router.push({ name: 'login' });
+        try {
+          await axios.post('/api/auth/signup', {
+            fullName: this.fullName,
+            email: this.email,
+            password: this.password
+          });
+          alert('Your account has been created successfully!');
+          this.$router.push({ name: 'login' });
+        } catch (error) {
+          console.error('Error creating account:', error);
+          alert('Failed to create account. Please try again later.');
+        }
       } else {
         alert('Please make sure your passwords match.');
       }
@@ -55,8 +60,9 @@ export default {
       this.$router.push({ name: 'login' });
     }
   }
-}
+};
 </script>
+
 <style scoped>
 body {
   font-family: 'Roboto', sans-serif;
@@ -64,14 +70,13 @@ body {
 }
 
 .signup-container {
-    position: relative;
-    width: 100%;
-    height: 122vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  height: 122vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 
 .signup-background {
   position: fixed;
@@ -85,14 +90,14 @@ body {
 }
 
 .signup-content {
-    position: relative;
-    width: 380px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.47);
-    z-index: 1;
-    margin-bottom: 11%;
+  position: relative;
+  width: 380px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.47);
+  z-index: 1;
+  margin-bottom: 11%;
 }
 
 .signup-title {

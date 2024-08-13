@@ -1,0 +1,28 @@
+# Ignorar arquivos de ambiente
+.env
+
+# Ignorar o diretório .nuxt (arquivos de build do Nuxt.js)
+.nuxt/
+
+# Ignorar arquivos de configuração PowerShell
+Set-ExecutionPolicy
+
+# Ignorar diretórios de build
+dist/
+
+# Ignorar arquivos de dependências
+node_modules/
+
+# Ignorar logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar configurações do editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -8,9 +8,9 @@ export default {
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
-  
+    
     srcDir: 'src/',
-
+  
     buildModules: ['@nuxt/typescript-build'],
   
     modules: [
@@ -19,7 +19,7 @@ export default {
     ],
   
     axios: {
-      baseURL: 'http://localhost:3000' 
+      baseURL: 'http://localhost:3000', 
     },
   
     auth: {

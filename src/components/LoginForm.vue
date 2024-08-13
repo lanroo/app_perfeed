@@ -7,11 +7,11 @@
         <img :src="Logo" alt="Logomarca" class="login-logo">
         <div class="login-overlay"></div>
         <form @submit.prevent="login" class="login-form">
-          <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail">
-          <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password">
+          <input type="text" v-model="username" class="login-input" :class="{ 'active': username }" placeholder="Number or e-mail" />
+          <input type="password" v-model="password" class="login-input" :class="{ 'active': password }" placeholder="Password" />
           <div v-if="passwordValidationMessage" class="validation-message">{{ passwordValidationMessage }}</div>
           <button type="submit" class="login-button">Login</button>
-          <a href="#" @click="redirectToForgotPassword" class="forgot-password">Forgot your password?</a>
+          <a href="#" @click.prevent="redirectToForgotPassword" class="forgot-password">Forgot your password?</a>
           <button type="button" @click="createAccount" class="button-account">Create Account</button>
         </form>
       </div>
@@ -21,6 +21,7 @@
 
 <script>
 import Logo from '@/assets/logo.png';
+import axios from 'axios';
 
 export default {
   name: 'LoginForm',
@@ -40,15 +41,27 @@ export default {
     }
   },
   methods: {
-    createAccount() {
-      this.$router.push({ name: 'signup' });
-    },
-    login() {
+    async login() {
       if (!this.passwordValidationMessage) {
-        // Adicione aqui a lógica de login, se houver.
+        try {
+          const response = await axios.post('http://localhost:3000/api/auth/login', {
+            username: this.username,
+            password: this.password
+          });
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+          alert('Login successful!');
+          this.$router.push('/');
+        } catch (error) {
+          console.error('Login failed:', error);
+          alert('Login failed. Please check your credentials.');
+        }
       } else {
         alert('Please correct the errors before submitting.');
       }
+    },
+    createAccount() {
+      this.$router.push({ name: 'signup' });
     },
     redirectToForgotPassword() {
       this.$router.push({ name: 'forgotpassword' });
@@ -122,10 +135,8 @@ body {
   text-align: center;
   font-size: 28px;
   margin-bottom: 30px;
-  display: block;
   padding-top: 23px;
   text-shadow: 1px 1px 3px rgba(233, 230, 230, 0.6);
-  display: none;
 }
 
 .login-logo {
