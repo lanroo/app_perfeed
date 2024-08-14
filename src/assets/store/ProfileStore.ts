@@ -8,7 +8,7 @@ interface ProfileStore {
 }
 
 export const profileStore = reactive<ProfileStore>({
-  profileImage: 'https://randomuser.me/api/portraits/lego/6.jpg', // Imagem inicial do perfil
+  profileImage: 'https://randomuser.me/api/portraits/lego/6.jpg', 
   firstName: 'Julia',
   lastName: 'Silva',
   updateProfileImage(newImage: string) {

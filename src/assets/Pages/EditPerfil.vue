@@ -2,7 +2,6 @@
   <div class="edit-profile-page">
     <h1>Editar Perfil</h1>
     <form @submit.prevent="saveProfile">
-
       <!-- Visualização e Edição da Capa do Perfil -->
       <div class="form-group">
         <label for="coverPhoto">Foto da capa</label>
@@ -29,6 +28,7 @@
         <div class="avatar-options">
           <img v-for="avatar in avatars" :key="avatar" :src="avatar" :alt="'Avatar ' + avatar" class="avatar-option" @click="selectAvatar(avatar)">
         </div>
+        <button @click.prevent="openCreateAvatarModal">Ou crie o seu próprio avatar</button>
       </div>
       
       <div class="form-group">
@@ -43,11 +43,94 @@
 
       <button type="submit" class="save-button">Salvar</button>
     </form>
+
+    <!-- Modal para Criar Avatar -->
+    <div v-if="showCreateAvatarModal" class="modal">
+      <div class="modal-content">
+        <h2>Criar seu próprio avatar</h2>
+        
+        <!-- Preview do Avatar -->
+        <div id="avatar-container"></div>
+        
+        <!-- Seleção de Gênero -->
+        <div class="avatar-customization">
+          <div>
+            <label for="gender">Gênero</label>
+            <select v-model="customAvatar.gender" @change="updateAvatar('gender')">
+              <option value="masculino">Masculino</option>
+              <option value="feminino">Feminino</option>
+            </select>
+          </div>
+
+          <!-- Seleção de Cor da Pele -->
+          <div>
+            <label for="skinColor">Tom de Pele</label>
+            <div class="color-options">
+              <div v-for="color in skinColors" :key="color" 
+                   :style="{ backgroundColor: color }" 
+                   class="color-option" 
+                   @click="setSkinColor(color)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Seleção de Tipo e Cor de Cabelo -->
+          <div>
+            <label for="hairStyle">Estilo de Cabelo</label>
+            <select v-model="customAvatar.hairStyle" @change="updateAvatar('hairStyle')">
+              <option v-for="style in hairStyles" :key="style" :value="style">{{ style }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="hairColor">Cor do Cabelo</label>
+            <div class="color-options">
+              <div v-for="color in hairColors" :key="color" 
+                   :style="{ backgroundColor: color }" 
+                   class="color-option" 
+                   @click="setHairColor(color)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Seleção de Roupa -->
+          <div>
+            <label for="outfit">Roupas</label>
+            <select v-model="customAvatar.outfit" @change="updateAvatar('outfit')">
+              <option v-for="outfit in outfitOptions" :key="outfit" :value="outfit">{{ outfit }}</option>
+            </select>
+          </div>
+
+          <!-- Seleção de Acessórios -->
+          <div>
+            <label for="accessory">Acessórios</label>
+            <select v-model="customAvatar.accessory" @change="updateAvatar('accessory')">
+              <option v-for="accessory in accessoryOptions" :key="accessory" :value="accessory">{{ accessory }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Escolha de fundo -->
+        <div class="background-options">
+          <label>
+            <input type="radio" v-model="background" value="white"> Fundo Branco
+          </label>
+          <label>
+            <input type="radio" v-model="background" value="colorful"> Fundo Colorido
+          </label>
+        </div>
+
+        <button @click="captureAvatar">Criar</button>
+        <button @click="closeCreateAvatarModal">Cancelar</button>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import { AvatarGenerator } from 'random-avatar-generator';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export default {
   name: 'EditPerfil',
@@ -59,14 +142,51 @@ export default {
       currentProfilePicture: 'https://randomuser.me/api/portraits/lego/6.jpg',
       selectedCoverPhoto: '',
       selectedProfilePicture: '',
-      avatars: []
+      avatars: [
+        'https://i.pravatar.cc/150?img=1',
+        'https://i.pravatar.cc/150?img=2',
+        'https://i.pravatar.cc/150?img=3',
+        'https://i.pravatar.cc/150?img=4',
+        'https://i.pravatar.cc/150?img=5',
+        'https://i.pravatar.cc/150?img=6',
+        'https://i.pravatar.cc/150?img=7',
+        'https://i.pravatar.cc/150?img=8'
+      ],
+      showCreateAvatarModal: false,
+      customAvatar: {
+        gender: 'masculino',
+        skinColor: '#f5d6c6',
+        hairStyle: 'curto',
+        hairColor: '#000000',
+        outfit: '',
+        accessory: ''
+      },
+      skinColors: ['#f5d6c6', '#d2a679', '#8d5524', '#c68642', '#e0ac69'],
+      hairColors: ['#000000', '#8b4513', '#ffdbac', '#d1b280', '#ffffff'],
+      hairStyles: ['curto', 'longo', 'cacheado', 'trançado'],
+      outfitOptions: ['Roupa1', 'Roupa2', 'Roupa3'],
+      accessoryOptions: ['Chapéu', 'Óculos', 'Brincos'],
+      background: 'white',
+      scene: null,
+      camera: null,
+      renderer: null,
+      avatar: null
     };
   },
-  created() {
-    const generator = new AvatarGenerator();
-    this.avatars = Array.from({ length: 8 }, () => generator.generateRandomAvatar());
+  mounted() {
+    this.initScene();
+    this.loadAvatar(); // Carrega o avatar padrão logo ao abrir a modal
   },
   methods: {
+    openCreateAvatarModal() {
+      this.showCreateAvatarModal = true;
+      this.$nextTick(() => {
+        this.renderer.render(this.scene, this.camera); // Renderiza novamente ao abrir a modal
+      });
+    },
+    closeCreateAvatarModal() {
+      this.showCreateAvatarModal = false;
+    },
     triggerCoverUpload() {
       this.$refs.coverInput.click();
     },
@@ -95,6 +215,70 @@ export default {
     },
     selectAvatar(avatar) {
       this.currentProfilePicture = avatar; // Define o avatar como a foto de perfil selecionada
+    },
+    setSkinColor(color) {
+      this.customAvatar.skinColor = color;
+      this.updateAvatar('skin');
+    },
+    setHairColor(color) {
+      this.customAvatar.hairColor = color;
+      this.updateAvatar('hair');
+    },
+    initScene() {
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      this.renderer = new THREE.WebGLRenderer({ alpha: true });
+      this.renderer.setSize(400, 400);
+      const container = document.getElementById('avatar-container');
+      if (container) {
+        container.appendChild(this.renderer.domElement);
+      }
+      this.camera.position.z = 3;
+      this.animate = this.animate.bind(this); // Garante que o método animate funcione corretamente
+    },
+    loadAvatar() {
+      const loader = new GLTFLoader();
+      loader.load('/models/character.glb', (gltf) => {
+        this.avatar = gltf.scene;
+        this.scene.add(this.avatar);
+        this.animate();
+      });
+    },
+    updateAvatar(part) {
+      if (this.avatar) {
+        if (part === 'gender') {
+          // Implementar lógica de troca de gênero (carregar modelo apropriado)
+        } else if (part === 'skin') {
+          this.avatar.traverse((child) => {
+            if (child.isMesh && child.name.includes('Skin')) {
+              child.material.color.set(this.customAvatar.skinColor);
+            }
+          });
+        } else if (part === 'hair') {
+          this.avatar.traverse((child) => {
+            if (child.isMesh && child.name.includes('Hair')) {
+              child.material.color.set(this.customAvatar.hairColor);
+            }
+          });
+        } else if (part === 'outfit') {
+          // Implementar lógica de troca de roupa
+        } else if (part === 'accessory') {
+          // Implementar lógica de troca de acessórios
+        }
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+    animate() {
+      requestAnimationFrame(this.animate);
+      if (this.avatar) {
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+    captureAvatar() {
+      this.renderer.render(this.scene, this.camera);
+      const imgData = this.renderer.domElement.toDataURL('image/png');
+      this.currentProfilePicture = imgData; // Define a imagem capturada como a foto de perfil
+      this.showCreateAvatarModal = false;
     },
     saveProfile() {
       alert(`Perfil salvo com sucesso! \nNome: ${this.firstName} ${this.lastName}`);
@@ -229,5 +413,57 @@ input[type="file"] {
 
 .save-button:hover {
   background-color: #365899;
+}
+
+/* Modal para criação de avatar */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+}
+
+#avatar-container {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto 20px auto;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.color-options {
+  display: flex;
+  gap: 10px;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.avatar-customization {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.background-options {
+  margin-bottom: 20px;
 }
 </style>

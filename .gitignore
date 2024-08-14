@@ -1,8 +1,6 @@
 # Ignorar o arquivo main.js 
 src/main.js
 
-# Ignorar o diretório .nuxt (arquivos de build do Nuxt.js)
-.nuxt/
 
 # Outras entradas do .gitignore
 .DS_Store
@@ -41,4 +39,4 @@ Desktop.ini
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-nuxt.config.js
+

@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     saveSettings() {
-      // Simular o salvamento das configurações
       console.log('Configurações salvas:', this.settings);
       this.saved = true;
       setTimeout(() => {
