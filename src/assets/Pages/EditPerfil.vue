@@ -3,12 +3,26 @@
     <h1>Editar Perfil</h1>
     <form @submit.prevent="saveProfile">
 
-      <!-- Edição da capa do perfil -->
+      <!-- Visualização e Edição da Capa do Perfil -->
       <div class="form-group">
-        <label for="coverPhoto">Trocar Capa do Perfil:</label>
-        <input type="file" id="coverPhoto" @change="onCoverFileSelected">
+        <label for="coverPhoto">Foto da capa</label>
+        <div class="cover-preview-container">
+          <img :src="currentCoverPhoto" alt="Capa atual" class="cover-preview">
+          <a href="#" @click.prevent="triggerCoverUpload" class="edit-link">Editar</a>
+        </div>
+        <input type="file" id="coverPhoto" ref="coverInput" @change="onCoverFileSelected" style="display: none;">
       </div>
 
+      <!-- Visualização e Edição da Foto do Perfil -->
+      <div class="form-group">
+        <label for="profilePicture">Foto do perfil</label>
+        <div class="profile-preview-container">
+          <img :src="currentProfilePicture" alt="Foto de perfil atual" class="profile-preview">
+          <a href="#" @click.prevent="triggerProfileUpload" class="edit-link">Editar</a>
+        </div>
+        <input type="file" id="profilePicture" ref="profileInput" @change="onFileSelected" style="display: none;">
+      </div>
+      
       <div class="form-group">
         <label for="firstName">Nome:</label>
         <input v-model="firstName" type="text" id="firstName" placeholder="Nome">
@@ -18,33 +32,9 @@
         <label for="lastName">Sobrenome:</label>
         <input v-model="lastName" type="text" id="lastName" placeholder="Sobrenome">
       </div>
-      
-      <div class="form-group">
-        <label for="profilePicture">Trocar Foto do Perfil:</label>
-        <input type="file" id="profilePicture" @change="onFileSelected">
-      </div>
-      
-      <div class="form-group">
-        <label for="avatar">Escolher Avatar:</label>
-        <div class="avatar-options">
-          <img v-for="avatar in avatars" :key="avatar" :src="avatar" :alt="'Avatar ' + avatar" class="avatar-option" @click="selectAvatar(avatar)">
-        </div>
-      </div>
-      
+
       <button type="submit" class="save-button">Salvar</button>
     </form>
-    
-    <div v-if="selectedAvatar || selectedCoverPhoto" class="preview">
-      <h2>Pré-visualização:</h2>
-      <div v-if="selectedCoverPhoto">
-        <h3>Capa do Perfil:</h3>
-        <img :src="selectedCoverPhoto" alt="Capa escolhida" class="cover-preview">
-      </div>
-      <div v-if="selectedAvatar" class="avatar-preview-container">
-        <h3>Avatar Escolhido:</h3>
-        <img :src="selectedAvatar" alt="Avatar escolhido" class="avatar-preview">
-      </div>
-    </div>
   </div>
 </template>
 
@@ -55,24 +45,25 @@ export default {
     return {
       firstName: 'Julia',
       lastName: 'Silva',
-      selectedAvatar: '',
+      currentCoverPhoto: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQxsdbrkQqRfP5zI_1Kt6Fx809rAXXxsyhBYcf0iK5fF7h_9m0NSnMGT9zZotBb_9jEzf70HRlHnL2P3Y3JqPPVoP0cPJPHG3IlqC6xwJb1b-uTDhzG23BY8mmrsHTIJwemc4TD9r8NG45/s1600/Capa+para+Facebook+-fb-capas.blogspot+-+estilo+intagram+-+dente+de+leao.jpg',
+      currentProfilePicture: 'https://randomuser.me/api/portraits/lego/6.jpg',
       selectedCoverPhoto: '',
-      avatars: [
-        'https://i.pravatar.cc/150?img=1',
-        'https://i.pravatar.cc/150?img=2',
-        'https://i.pravatar.cc/150?img=3',
-        'https://i.pravatar.cc/150?img=4',
-        'https://i.pravatar.cc/150?img=5'
-      ]
+      selectedProfilePicture: ''
     };
   },
   methods: {
+    triggerCoverUpload() {
+      this.$refs.coverInput.click();
+    },
+    triggerProfileUpload() {
+      this.$refs.profileInput.click();
+    },
     onFileSelected(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.selectedAvatar = e.target.result;
+          this.currentProfilePicture = e.target.result;
         };
         reader.readAsDataURL(file);
       }
@@ -82,13 +73,10 @@ export default {
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.selectedCoverPhoto = e.target.result;
+          this.currentCoverPhoto = e.target.result;
         };
         reader.readAsDataURL(file);
       }
-    },
-    selectAvatar(avatar) {
-      this.selectedAvatar = avatar;
     },
     saveProfile() {
       alert(`Perfil salvo com sucesso! \nNome: ${this.firstName} ${this.lastName}`);
@@ -116,7 +104,7 @@ h1 {
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 label {
@@ -135,22 +123,36 @@ input[type="file"] {
   font-size: 16px;
 }
 
-.avatar-options {
+.cover-preview-container,
+.profile-preview-container {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.avatar-option {
-  width: 50px;
-  height: 50px;
+.cover-preview {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  border-radius: 8px;
+}
+
+.profile-preview {
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
-.avatar-option:hover {
-  transform: scale(1.1);
+.edit-link {
+  color: #4267B2;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-link:hover {
+  text-decoration: underline;
 }
 
 .save-button {
@@ -163,31 +165,12 @@ input[type="file"] {
   font-weight: 600;
   margin-top: 20px;
   transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 .save-button:hover {
   background-color: #365899;
-}
-
-.preview {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.cover-preview {
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-  border-radius: 8px;
-}
-
-.avatar-preview-container {
-  margin-top: 20px;
-}
-
-.avatar-preview {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
 }
 </style>
