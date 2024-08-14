@@ -94,7 +94,7 @@ export default {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-family: 'Poppins', sans-serif;
-  margin-top: 7vw;
+  margin-top: 2vw;
 }
 
 h1 {
