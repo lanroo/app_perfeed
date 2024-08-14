@@ -124,9 +124,7 @@ input[type="file"] {
 }
 
 .cover-preview-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
   margin-bottom: 20px;
 }
 
@@ -144,6 +142,20 @@ input[type="file"] {
   flex-direction: column;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.cover-preview-container .edit-link {
+  position: absolute;
+  top: 10px; 
+  right: 10px; 
+  color: #fafafa;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cover-preview-container .edit-link:hover {
+  text-decoration: underline;
 }
 
 .profile-preview {
