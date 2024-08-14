@@ -25,6 +25,7 @@
       </div>
       
       <button type="submit" class="save-button">Salvar</button>
+       <!-- <button type="submit" class="save-button">Voltar</button> -->
     </form>
     
     <div v-if="selectedAvatar" class="preview">
@@ -77,10 +78,11 @@ export default {
   max-width: 600px;
   margin: 0 auto;
   background-color: #fff;
-  padding: 20px;
+  padding: 64px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-family: 'Poppins', sans-serif;
+  margin-top: 7vw;
 }
 
 h1 {
