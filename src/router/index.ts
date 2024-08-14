@@ -4,6 +4,8 @@ import SignupForm from '@/components/SignupForm.vue';
 import ForgotPassword from '@/components/ForgotPassword.vue';
 import FeedView from '@/components/Feed/FeedView.vue'; 
 import PerfilPage from '@/assets/Pages/PerfilPage.vue';
+import EditPerfil from '@/assets/Pages/EditPerfil.vue';
+
 
 
 
@@ -36,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/profile',
     name: 'profile',
     component: PerfilPage 
+  },
+  {
+    path: '/edit-profile',
+    name: 'edit-profile',
+    component: EditPerfil 
   }
 ];
 

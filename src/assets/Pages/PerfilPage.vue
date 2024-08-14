@@ -14,7 +14,7 @@
         <p class="profile-friends">49 amigos</p>
         <div class="profile-actions">
           <button class="add-story-button">+ Adicionar ao story</button>
-          <button class="edit-profile-button">Editar perfil</button>
+          <button class="edit-profile-button" @click="editProfile">Editar perfil</button>
         </div>
       </div>
     </div>
@@ -88,6 +88,9 @@ export default {
     };
   },
   methods: {
+    editProfile() {
+      this.$router.push({ name: 'edit-profile' });
+    },
     setActiveSection(section) {
       this.activeSection = section;
     },
@@ -370,6 +373,4 @@ export default {
   border-radius: 50%;
   object-fit: cover;
 }
-
-
 </style>
