@@ -2,6 +2,13 @@
   <div class="edit-profile-page">
     <h1>Editar Perfil</h1>
     <form @submit.prevent="saveProfile">
+
+      <!-- Edição da capa do perfil -->
+      <div class="form-group">
+        <label for="coverPhoto">Trocar Capa do Perfil:</label>
+        <input type="file" id="coverPhoto" @change="onCoverFileSelected">
+      </div>
+
       <div class="form-group">
         <label for="firstName">Nome:</label>
         <input v-model="firstName" type="text" id="firstName" placeholder="Nome">
@@ -25,12 +32,18 @@
       </div>
       
       <button type="submit" class="save-button">Salvar</button>
-       <!-- <button type="submit" class="save-button">Voltar</button> -->
     </form>
     
-    <div v-if="selectedAvatar" class="preview">
-      <h2>Pré-visualização do Avatar Escolhido:</h2>
-      <img :src="selectedAvatar" alt="Avatar escolhido" class="avatar-preview">
+    <div v-if="selectedAvatar || selectedCoverPhoto" class="preview">
+      <h2>Pré-visualização:</h2>
+      <div v-if="selectedCoverPhoto">
+        <h3>Capa do Perfil:</h3>
+        <img :src="selectedCoverPhoto" alt="Capa escolhida" class="cover-preview">
+      </div>
+      <div v-if="selectedAvatar" class="avatar-preview-container">
+        <h3>Avatar Escolhido:</h3>
+        <img :src="selectedAvatar" alt="Avatar escolhido" class="avatar-preview">
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +56,7 @@ export default {
       firstName: 'Julia',
       lastName: 'Silva',
       selectedAvatar: '',
+      selectedCoverPhoto: '',
       avatars: [
         'https://i.pravatar.cc/150?img=1',
         'https://i.pravatar.cc/150?img=2',
@@ -59,6 +73,16 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.selectedAvatar = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    onCoverFileSelected(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.selectedCoverPhoto = e.target.result;
         };
         reader.readAsDataURL(file);
       }
@@ -150,10 +174,20 @@ input[type="file"] {
   text-align: center;
 }
 
+.cover-preview {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.avatar-preview-container {
+  margin-top: 20px;
+}
+
 .avatar-preview {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  margin-top: 10px;
 }
 </style>
