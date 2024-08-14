@@ -3,6 +3,9 @@ import LoginForm from '@/components/LoginForm.vue';
 import SignupForm from '@/components/SignupForm.vue';
 import ForgotPassword from '@/components/ForgotPassword.vue';
 import FeedView from '@/components/Feed/FeedView.vue'; 
+import PerfilPage from '@/assets/Pages/PerfilPage.vue';
+
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -29,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'forgotpassword',
     component: ForgotPassword
   },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: PerfilPage 
+  }
 ];
 
 const router = createRouter({

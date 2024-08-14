@@ -16,7 +16,7 @@
               <span class="user-name">{{ post.userName }}</span>
               <span class="post-timestamp">{{ post.timestamp }}</span>
             </div>
-            <span v-if="post.userName === 'Lanna Almeida'" class="edit-buttons">
+            <span v-if="post.userName === 'Julia Silva'" class="edit-buttons">
               <button @click="editPost(post)" class="icon-button"><i class="fas fa-pencil-alt"></i></button>
               <button @click="deletePost(post)" class="icon-button"><i class="fas fa-trash"></i></button>
             </span>
@@ -71,34 +71,86 @@ export default {
     AppNavbar
   },
   data() {
-    return {
-      userProfileImage: 'https://randomuser.me/api/portraits/men/32.jpg',
-      isUserMenuOpen: false,
-      posts: [
-        {
-          id: 1,
-          userName: 'Ana Souza',
-          userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
-          content: 'Aproveitando o sol e o mar hoje na praia. Que dia incrível!',
-          comment: '',
-          comments: [],
-          liked: true,
-          likes: 15,
-          shares: 3,
-          image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
-          timestamp: this.generateRandomTimestamp()
-        },
-      ],
-      visiblePosts: [],
-      loading: false,
-      newPostContent: '',
-      showEditModal: false,
-      showDeleteModal: false,
-      editedPostContent: '',
-      postToDelete: null,
-      postToEdit: null
-    };
-  },
+  return {
+    userProfileImage: 'https://randomuser.me/api/portraits/lego/6.jpg',
+    isUserMenuOpen: false,
+    posts: [
+      {
+        id: 1,
+        userName: 'Ana Paula Souza',
+        userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
+        content: 'Aproveitando o sol e o mar hoje na praia. Que dia incrível!',
+        comment: '',
+        comments: [],
+        liked: true,
+        likes: 15,
+        shares: 3,
+        image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
+        timestamp: this.generateRandomTimestamp()
+      },
+      {
+        id: 2,
+        userName: 'Carlos Lima',
+        userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
+        content: 'Finalmente terminei aquele livro que estava lendo há meses. Altamente recomendável!',
+        comment: '',
+        comments: [],
+        liked: false,
+        likes: 8,
+        shares: 1,
+        image: null,  // Post apenas com texto
+        timestamp: this.generateRandomTimestamp()
+      },
+      {
+         id: 3,
+        userName: 'Larissa Maria',
+        userImage: 'https://randomuser.me/api/portraits/women/65.jpg',
+        content: 'Hoje está um dia lindo!',
+        comment: '',
+        comments: [],
+        liked: false,
+        likes: 8,
+        shares: 1,
+        image: null,  // Post apenas com texto
+        timestamp: this.generateRandomTimestamp()
+      },
+      {
+        id: 4,
+        userName: 'Pedro Henrique',
+        userImage: 'https://randomuser.me/api/portraits/men/2.jpg',
+        content: 'Aprendendo novas receitas hoje. A cozinha está um caos, mas vale a pena! 🍲',
+        comment: '',
+        comments: [],
+        liked: false,
+        likes: 12,
+        shares: 2,
+        image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2',
+        timestamp: this.generateRandomTimestamp()
+      },
+      {
+        id: 5,
+        userName: 'Marta Lima',
+        userImage: 'https://randomuser.me/api/portraits/women/4.jpg',
+        content: 'Reflexões sobre a vida... Às vezes é bom desacelerar e pensar em tudo que conquistamos.',
+        comment: '',
+        comments: [],
+        liked: true,
+        likes: 18,
+        shares: 4,
+        image: null,  // Post apenas com texto
+        timestamp: this.generateRandomTimestamp()
+      }
+    ],
+    visiblePosts: [],
+    loading: false,
+    newPostContent: '',
+    showEditModal: false,
+    showDeleteModal: false,
+    editedPostContent: '',
+    postToDelete: null,
+    postToEdit: null
+  };
+},
   created() {
     this.loadMorePosts();
   },
@@ -162,7 +214,7 @@ export default {
       if (this.newPostContent.trim() !== '') {
         const newPost = {
           id: Date.now(),
-          userName: 'Lanna Almeida',
+          userName: 'Julia Silva',
           userImage: this.userProfileImage,
           title: 'Nova Postagem',
           content: this.newPostContent,
