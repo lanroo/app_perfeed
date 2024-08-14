@@ -123,8 +123,7 @@ input[type="file"] {
   font-size: 16px;
 }
 
-.cover-preview-container,
-.profile-preview-container {
+.cover-preview-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -138,10 +137,20 @@ input[type="file"] {
   border-radius: 8px;
 }
 
+.profile-preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .profile-preview {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  margin-bottom: 10px;
 }
 
 .edit-link {
