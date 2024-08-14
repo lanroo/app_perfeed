@@ -22,6 +22,14 @@
         </div>
         <input type="file" id="profilePicture" ref="profileInput" @change="onFileSelected" style="display: none;">
       </div>
+
+      <!-- Escolher Avatar -->
+      <div class="form-group">
+        <label for="avatar">Escolher Avatar</label>
+        <div class="avatar-options">
+          <img v-for="avatar in avatars" :key="avatar" :src="avatar" :alt="'Avatar ' + avatar" class="avatar-option" @click="selectAvatar(avatar)">
+        </div>
+      </div>
       
       <div class="form-group">
         <label for="firstName">Nome:</label>
@@ -39,6 +47,8 @@
 </template>
 
 <script>
+import { AvatarGenerator } from 'random-avatar-generator';
+
 export default {
   name: 'EditPerfil',
   data() {
@@ -48,8 +58,13 @@ export default {
       currentCoverPhoto: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQxsdbrkQqRfP5zI_1Kt6Fx809rAXXxsyhBYcf0iK5fF7h_9m0NSnMGT9zZotBb_9jEzf70HRlHnL2P3Y3JqPPVoP0cPJPHG3IlqC6xwJb1b-uTDhzG23BY8mmrsHTIJwemc4TD9r8NG45/s1600/Capa+para+Facebook+-fb-capas.blogspot+-+estilo+intagram+-+dente+de+leao.jpg',
       currentProfilePicture: 'https://randomuser.me/api/portraits/lego/6.jpg',
       selectedCoverPhoto: '',
-      selectedProfilePicture: ''
+      selectedProfilePicture: '',
+      avatars: []
     };
+  },
+  created() {
+    const generator = new AvatarGenerator();
+    this.avatars = Array.from({ length: 8 }, () => generator.generateRandomAvatar());
   },
   methods: {
     triggerCoverUpload() {
@@ -77,6 +92,9 @@ export default {
         };
         reader.readAsDataURL(file);
       }
+    },
+    selectAvatar(avatar) {
+      this.currentProfilePicture = avatar; // Define o avatar como a foto de perfil selecionada
     },
     saveProfile() {
       alert(`Perfil salvo com sucesso! \nNome: ${this.firstName} ${this.lastName}`);
@@ -163,6 +181,24 @@ input[type="file"] {
   height: 150px;
   border-radius: 50%;
   margin-bottom: 10px;
+}
+
+.avatar-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.avatar-option {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.avatar-option:hover {
+  transform: scale(1.1);
 }
 
 .edit-link {

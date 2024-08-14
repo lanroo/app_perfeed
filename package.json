@@ -19,6 +19,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.12.4",
+    "random-avatar-generator": "^2.0.0",
     "vue": "^3.2.13",
     "vue-identicon": "^0.1.0",
     "vue-router": "^4.3.2"
