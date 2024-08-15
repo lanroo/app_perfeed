@@ -90,6 +90,7 @@ export default {
       userProfileImage: 'https://randomuser.me/api/portraits/lego/6.jpg',
       isUserMenuOpen: false,
       posts: [
+        // Posts existentes
         {
           id: 1,
           userName: 'Ana Paula Souza',
@@ -198,16 +199,14 @@ export default {
           id: Date.now(),
           userName: 'Julia Silva',
           userImage: this.userProfileImage,
-          title: 'Nova Postagem',
           content: this.newPostContent,
-          comment: '',
-          comments: [],
           liked: false,
           likes: 0,
           shares: 0,
-          image: this.files.find(file => file.type.startsWith('image/'))?.url || null,
-          video: this.files.find(file => file.type.startsWith('video/'))?.url || null,
-          timestamp: this.generateRandomTimestamp()
+          image: this.filePreviews.find(file => file.type.startsWith('image/'))?.url || null,
+          video: this.filePreviews.find(file => file.type.startsWith('video/'))?.url || null,
+          timestamp: this.generateRandomTimestamp(),
+          comments: []
         };
         this.posts.unshift(newPost);
         this.newPostContent = '';
