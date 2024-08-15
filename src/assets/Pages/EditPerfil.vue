@@ -173,15 +173,18 @@ export default {
       avatar: null
     };
   },
-  mounted() {
-    this.initScene();
-    this.loadAvatar(); // Carrega o avatar padrão logo ao abrir a modal
-  },
-  methods: {
-    openCreateAvatarModal() {
-      this.showCreateAvatarModal = true;
-      this.$nextTick(() => {
-        this.renderer.render(this.scene, this.camera); // Renderiza novamente ao abrir a modal
+ mounted() {
+  this.initScene();
+  this.loadDefaultAvatar();
+},
+
+methods: {
+  loadDefaultAvatar() {
+    const loader = new GLTFLoader();
+    loader.load('/models/character.glb', (gltf) => {
+      this.avatar = gltf.scene;
+      this.scene.add(this.avatar);
+      this.renderer.render(this.scene, this.camera); 
       });
     },
     closeCreateAvatarModal() {
@@ -214,7 +217,7 @@ export default {
       }
     },
     selectAvatar(avatar) {
-      this.currentProfilePicture = avatar; // Define o avatar como a foto de perfil selecionada
+      this.currentProfilePicture = avatar; 
     },
     setSkinColor(color) {
       this.customAvatar.skinColor = color;
@@ -234,7 +237,7 @@ export default {
         container.appendChild(this.renderer.domElement);
       }
       this.camera.position.z = 3;
-      this.animate = this.animate.bind(this); // Garante que o método animate funcione corretamente
+      this.animate = this.animate.bind(this);
     },
     loadAvatar() {
       const loader = new GLTFLoader();
@@ -247,7 +250,6 @@ export default {
     updateAvatar(part) {
       if (this.avatar) {
         if (part === 'gender') {
-          // Implementar lógica de troca de gênero (carregar modelo apropriado)
         } else if (part === 'skin') {
           this.avatar.traverse((child) => {
             if (child.isMesh && child.name.includes('Skin')) {
@@ -277,7 +279,7 @@ export default {
     captureAvatar() {
       this.renderer.render(this.scene, this.camera);
       const imgData = this.renderer.domElement.toDataURL('image/png');
-      this.currentProfilePicture = imgData; // Define a imagem capturada como a foto de perfil
+      this.currentProfilePicture = imgData; // imagem de perfil
       this.showCreateAvatarModal = false;
     },
     saveProfile() {

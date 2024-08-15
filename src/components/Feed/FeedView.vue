@@ -3,13 +3,15 @@
     <AppNavbar :userProfileImage="userProfileImage" @navigate="navigate" />
     <div class="feed-container">
       <h1>Feed</h1>
-      <div class="comment-box">
-        <textarea v-model="newPostContent" placeholder="No que você está pensando?" class="comment-input" @focus="expandTextarea" @input="expandTextarea"></textarea>
-        <button @click="createPost" class="comment-button">Postar</button>
+
+      <!-- Comment Box Trigger -->
+      <div class="comment-box" @click="openModal">
+        <textarea v-model="newPostContent" placeholder="No que você está pensando?" class="comment-input"></textarea>
       </div>
 
       <div class="post-list">
         <div v-for="post in visiblePosts" :key="post.id" class="post">
+          <!-- Post Content -->
           <div class="user-info">
             <img :src="post.userImage" alt="User Image" class="user-image">
             <div class="user-details">
@@ -39,24 +41,14 @@
       <div v-if="loading" class="loading">Carregando...</div>
     </div>
 
-    <div v-if="showEditModal" class="modal-overlay">
+    <!-- Modal for Creating a Post -->
+    <div v-if="showCreatePostModal" class="modal-overlay">
       <div class="modal">
-        <h2>Editar Post</h2>
-        <textarea v-model="editedPostContent" class="modal-textarea"></textarea>
+        <h2>Criar Publicação</h2>
+        <textarea v-model="newPostContent" placeholder="No que você está pensando?" class="modal-textarea"></textarea>
         <div class="modal-buttons">
-          <button @click="cancelEdit" class="modal-cancel-button">Cancelar</button>
-          <button @click="saveEdit" class="modal-save-button">Salvar</button>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="showDeleteModal" class="modal-overlay">
-      <div class="modal">
-        <h2>Excluir Post</h2>
-        <p>Deseja realmente excluir este post?</p>
-        <div class="modal-buttons">
-          <button @click="cancelDelete" class="modal-cancel-button">Cancelar</button>
-          <button @click="confirmDelete" class="modal-delete-button">Excluir</button>
+          <button @click="cancelCreatePost" class="modal-cancel-button">Cancelar</button>
+          <button @click="createPost" class="modal-post-button">Postar</button>
         </div>
       </div>
     </div>
@@ -71,86 +63,87 @@ export default {
     AppNavbar
   },
   data() {
-  return {
-    userProfileImage: 'https://randomuser.me/api/portraits/lego/6.jpg',
-    isUserMenuOpen: false,
-    posts: [
-      {
-        id: 1,
-        userName: 'Ana Paula Souza',
-        userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
-        content: 'Aproveitando o sol e o mar hoje na praia. Que dia incrível!',
-        comment: '',
-        comments: [],
-        liked: true,
-        likes: 15,
-        shares: 3,
-        image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
-        timestamp: this.generateRandomTimestamp()
-      },
-      {
-        id: 2,
-        userName: 'Carlos Lima',
-        userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-        content: 'Finalmente terminei aquele livro que estava lendo há meses. Altamente recomendável!',
-        comment: '',
-        comments: [],
-        liked: false,
-        likes: 8,
-        shares: 1,
-        image: null,  // Post apenas com texto
-        timestamp: this.generateRandomTimestamp()
-      },
-      {
-         id: 3,
-        userName: 'Larissa Maria',
-        userImage: 'https://randomuser.me/api/portraits/women/65.jpg',
-        content: 'Hoje está um dia lindo!',
-        comment: '',
-        comments: [],
-        liked: false,
-        likes: 8,
-        shares: 1,
-        image: null,  // Post apenas com texto
-        timestamp: this.generateRandomTimestamp()
-      },
-      {
-        id: 4,
-        userName: 'Pedro Henrique',
-        userImage: 'https://randomuser.me/api/portraits/men/2.jpg',
-        content: 'Aprendendo novas receitas hoje. A cozinha está um caos, mas vale a pena! 🍲',
-        comment: '',
-        comments: [],
-        liked: false,
-        likes: 12,
-        shares: 2,
-        image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2',
-        timestamp: this.generateRandomTimestamp()
-      },
-      {
-        id: 5,
-        userName: 'Marta Lima',
-        userImage: 'https://randomuser.me/api/portraits/women/4.jpg',
-        content: 'Reflexões sobre a vida... Às vezes é bom desacelerar e pensar em tudo que conquistamos.',
-        comment: '',
-        comments: [],
-        liked: true,
-        likes: 18,
-        shares: 4,
-        image: null,  // Post apenas com texto
-        timestamp: this.generateRandomTimestamp()
-      }
-    ],
-    visiblePosts: [],
-    loading: false,
-    newPostContent: '',
-    showEditModal: false,
-    showDeleteModal: false,
-    editedPostContent: '',
-    postToDelete: null,
-    postToEdit: null
-  };
-},
+    return {
+      userProfileImage: 'https://randomuser.me/api/portraits/lego/6.jpg',
+      isUserMenuOpen: false,
+      posts: [
+        {
+          id: 1,
+          userName: 'Ana Paula Souza',
+          userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
+          content: 'Aproveitando o sol e o mar hoje na praia. Que dia incrível!',
+          comment: '',
+          comments: [],
+          liked: true,
+          likes: 15,
+          shares: 3,
+          image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
+          timestamp: this.generateRandomTimestamp()
+        },
+        {
+          id: 2,
+          userName: 'Carlos Lima',
+          userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
+          content: 'Finalmente terminei aquele livro que estava lendo há meses. Altamente recomendável!',
+          comment: '',
+          comments: [],
+          liked: false,
+          likes: 8,
+          shares: 1,
+          image: null,  // Post apenas com texto
+          timestamp: this.generateRandomTimestamp()
+        },
+        {
+          id: 3,
+          userName: 'Larissa Maria',
+          userImage: 'https://randomuser.me/api/portraits/women/65.jpg',
+          content: 'Hoje está um dia lindo!',
+          comment: '',
+          comments: [],
+          liked: false,
+          likes: 8,
+          shares: 1,
+          image: null,  // Post apenas com texto
+          timestamp: this.generateRandomTimestamp()
+        },
+        {
+          id: 4,
+          userName: 'Pedro Henrique',
+          userImage: 'https://randomuser.me/api/portraits/men/2.jpg',
+          content: 'Aprendendo novas receitas hoje. A cozinha está um caos, mas vale a pena! 🍲',
+          comment: '',
+          comments: [],
+          liked: false,
+          likes: 12,
+          shares: 2,
+          image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2',
+          timestamp: this.generateRandomTimestamp()
+        },
+        {
+          id: 5,
+          userName: 'Marta Lima',
+          userImage: 'https://randomuser.me/api/portraits/women/4.jpg',
+          content: 'Reflexões sobre a vida... Às vezes é bom desacelerar e pensar em tudo que conquistamos.',
+          comment: '',
+          comments: [],
+          liked: true,
+          likes: 18,
+          shares: 4,
+          image: null,  // Post apenas com texto
+          timestamp: this.generateRandomTimestamp()
+        }
+      ],
+      visiblePosts: [],
+      loading: false,
+      newPostContent: '',
+      showCreatePostModal: false,  // New state for modal visibility
+      showEditModal: false,
+      showDeleteModal: false,
+      editedPostContent: '',
+      postToDelete: null,
+      postToEdit: null
+    };
+  },
   created() {
     this.loadMorePosts();
   },
@@ -158,57 +151,11 @@ export default {
     navigate(route) {
       this.$router.push(route);
     },
-    toggleUserMenu() {
-      this.isUserMenuOpen = !this.isUserMenuOpen;
+    openModal() {
+      this.showCreatePostModal = true;
     },
-    generateRandomTimestamp() {
-      const months = [
-        'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
-        'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
-      ];
-      const day = Math.floor(Math.random() * 30) + 1;
-      const month = months[Math.floor(Math.random() * months.length)];
-      const hour = Math.floor(Math.random() * 24);
-      const minute = Math.floor(Math.random() * 60);
-      return `${day} de ${month} às ${hour}:${minute < 10 ? '0' + minute : minute}`;
-    },
-    goToHome() {
-      this.$router.push({ name: 'feed' });
-    },
-    goToLogin() {
-      this.$router.push({ name: 'login' });
-    },
-    goToSignup() {
-      this.$router.push({ name: 'signup' });
-    },
-    goToForgotPassword() {
-      this.$router.push({ name: 'forgotpassword' });
-    },
-    addComment(post) {
-      if (post.comment.trim() !== '') {
-        post.comments.push({ id: Date.now(), text: post.comment });
-        post.comment = '';
-      }
-    },
-    expandTextarea(event) {
-      event.target.style.height = 'auto';
-      event.target.style.height = event.target.scrollHeight + 'px';
-    },
-    toggleLike(post) {
-      post.liked = !post.liked;
-      post.likes += post.liked ? 1 : -1;
-    },
-    sharePost(post) {
-      post.shares++;
-    },
-    loadMorePosts() {
-      this.loading = true;
-      setTimeout(() => {
-        const startIndex = this.visiblePosts.length;
-        const endIndex = startIndex + 5;
-        this.visiblePosts = this.posts.slice(0, endIndex);
-        this.loading = false;
-      }, 1000);
+    closeModal() {
+      this.showCreatePostModal = false;
     },
     createPost() {
       if (this.newPostContent.trim() !== '') {
@@ -229,7 +176,32 @@ export default {
         this.posts.unshift(newPost);
         this.newPostContent = '';
         this.visiblePosts.unshift(newPost);
+        this.closeModal();  // Close modal after posting
       }
+    },
+    cancelCreatePost() {
+      this.newPostContent = '';
+      this.closeModal();
+    },
+    generateRandomTimestamp() {
+      const months = [
+        'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+        'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+      ];
+      const day = Math.floor(Math.random() * 30) + 1;
+      const month = months[Math.floor(Math.random() * months.length)];
+      const hour = Math.floor(Math.random() * 24);
+      const minute = Math.floor(Math.random() * 60);
+      return `${day} de ${month} às ${hour}:${minute < 10 ? '0' + minute : minute}`;
+    },
+    loadMorePosts() {
+      this.loading = true;
+      setTimeout(() => {
+        const startIndex = this.visiblePosts.length;
+        const endIndex = startIndex + 5;
+        this.visiblePosts = this.posts.slice(0, endIndex);
+        this.loading = false;
+      }, 1000);
     },
     editPost(post) {
       this.postToEdit = post;
@@ -261,22 +233,29 @@ export default {
     },
     cancelDelete() {
       this.showDeleteModal = false;
+    },
+    toggleLike(post) {
+      post.liked = !post.liked;
+      post.likes += post.liked ? 1 : -1;
+    },
+    sharePost(post) {
+      post.shares++;
+    },
+    addComment(post) {
+      if (post.comment.trim() !== '') {
+        post.comments.push({ id: Date.now(), text: post.comment });
+        post.comment = '';
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-
-.feed-container[data-v-ab293e58] {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 90px;
-}
 .feed-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 90px;
 }
 
 .post-list {
@@ -305,6 +284,7 @@ export default {
   margin-top: 20px;
   margin-left: 24%;
   margin-bottom: 7%;
+  cursor: pointer;
 }
 
 .comment-input {
@@ -317,32 +297,116 @@ export default {
   resize: none;
   transition: height 0.3s ease;
   max-width: 400px; 
+  cursor: text;
 }
 
-.comment-input:focus {
-  border-color: #281278;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.comment-button {
-  margin-left: 10px;
-  padding: 12px 20px;
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box; /* Certifica que o padding não afete a largura do modal */
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal-textarea {
+  width: 100%;
+  max-width: 100%; /* Certifica que o textarea não ultrapasse a largura do modal */
+  height: 150px; /* Ajuste a altura conforme necessário */
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Certifica que o padding não afete a largura do textarea */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  resize: vertical; /* Permite que o usuário redimensione a altura do textarea */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-post-button {
+  background-color: #281278;
+  color: #fff;
+  padding: 8px 16px;
   border: none;
   border-radius: 20px;
-  background-color: #281278; 
-  color: #fff;
   cursor: pointer;
   outline: none;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.comment-button:hover {
-  background-color: #180c45; 
+.modal-post-button:hover {
+  background-color: #180c45;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.modal-cancel-button {
+  background-color: #ccc;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-cancel-button:hover {
+  background-color: #b3b3b3;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 40%;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.user-details {
+  margin-right: 10px; 
+}
+
+.post-timestamp {
+  display: block;
+  font-size: 14px; 
+  color: #666; 
 }
 
 .post-actions {
   margin-top: 10px;
 }
-
 
 .action-button {
   margin-right: 10px;
@@ -374,108 +438,16 @@ export default {
   color: #666;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.user-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 40%;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.user-name {
-  font-weight: bold;
-  font-size: 18px;
-  color: #333;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-}
-h1 {
-    display: none;
-}
-
-.dropdown[data-v-1fd76d11] {
-    position: absolute;
-    top: 50px;
-    right: 28px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    padding: 10px 0;
-    min-width: 160px;
-}
-
-
-.user-details {
-  margin-right: 10px; 
-}
-
-.post-timestamp {
-  display: block;
-  font-size: 14px; 
-  color: #666; 
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 400px;
-  width: 100%;
-}
-
-.modal h2 {
-  margin-top: 0;
-}
-
-.modal-textarea {
-  width: 100%;
-  height: 100px; 
-  margin-bottom: 10px;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-
-.modal-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  outline: none;
-}
-
-.modal-cancel-button {
-  background-color: #ccc;
-}
-
-.modal-save-button {
-  background-color: #281278;
-  color: #fff;
-}
-
-.modal-delete-button {
-  background-color: #ff4b4b;
-  color: #fff;
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 28px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px 0;
+  min-width: 160px;
 }
 
 .edit-buttons button {
