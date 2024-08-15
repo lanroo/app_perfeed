@@ -25,6 +25,7 @@
           </div>
           <p>{{ post.content }}</p>
           <img v-if="post.image" :src="post.image" alt="Post Image">
+          <video v-if="post.video" controls :src="post.video"></video>
           <div class="post-actions">
             <button @click="toggleLike(post)" class="action-button"><i :class="['fas', post.liked ? 'fa-heart' : 'far fa-heart']"></i>{{ post.likes }}</button>
             <button @click="sharePost(post)" class="action-button"><i class="fas fa-share"></i> Compartilhar</button>
@@ -46,9 +47,31 @@
       <div class="modal">
         <h2>Criar Publicação</h2>
         <textarea v-model="newPostContent" placeholder="No que você está pensando?" class="modal-textarea"></textarea>
+        
+        <!-- Upload Section -->
+        <input type="file" @change="handleFileUpload" multiple class="file-input" accept="image/*,video/*">
+        <div v-if="filePreviews.length > 0" class="previews">
+          <div v-for="(file, index) in filePreviews" :key="index" class="preview">
+            <img v-if="file.type.startsWith('image/')" :src="file.url" class="preview-image">
+            <video v-if="file.type.startsWith('video/')" :src="file.url" class="preview-video" controls></video>
+          </div>
+        </div>
+
         <div class="modal-buttons">
           <button @click="cancelCreatePost" class="modal-cancel-button">Cancelar</button>
           <button @click="createPost" class="modal-post-button">Postar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Editing a Post -->
+    <div v-if="showEditModal" class="modal-overlay">
+      <div class="modal">
+        <h2>Editar Publicação</h2>
+        <textarea v-model="editedPostContent" placeholder="Edite seu post" class="modal-textarea"></textarea>
+        <div class="modal-buttons">
+          <button @click="cancelEditPost" class="modal-cancel-button">Cancelar</button>
+          <button @click="saveEditPost" class="modal-post-button">Salvar</button>
         </div>
       </div>
     </div>
@@ -72,71 +95,68 @@ export default {
           userName: 'Ana Paula Souza',
           userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
           content: 'Aproveitando o sol e o mar hoje na praia. Que dia incrível!',
-          comment: '',
-          comments: [],
           liked: true,
           likes: 15,
           shares: 3,
           image: 'https://www.feriasbrasil.com.br/fotosfb/261179695-MOB.jpg',
-          timestamp: this.generateRandomTimestamp()
+          timestamp: '25 de julho às 14:35',
+          comments: []
         },
         {
           id: 2,
           userName: 'Carlos Lima',
           userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
           content: 'Finalmente terminei aquele livro que estava lendo há meses. Altamente recomendável!',
-          comment: '',
-          comments: [],
           liked: false,
           likes: 8,
           shares: 1,
-          image: null,  // Post apenas com texto
-          timestamp: this.generateRandomTimestamp()
+          image: null,
+          timestamp: '24 de julho às 10:15',
+          comments: []
         },
         {
           id: 3,
           userName: 'Larissa Maria',
           userImage: 'https://randomuser.me/api/portraits/women/65.jpg',
           content: 'Hoje está um dia lindo!',
-          comment: '',
-          comments: [],
           liked: false,
           likes: 8,
           shares: 1,
-          image: null,  // Post apenas com texto
-          timestamp: this.generateRandomTimestamp()
+          image: null,
+          timestamp: '23 de julho às 17:45',
+          comments: []
         },
         {
           id: 4,
           userName: 'Pedro Henrique',
           userImage: 'https://randomuser.me/api/portraits/men/2.jpg',
           content: 'Aprendendo novas receitas hoje. A cozinha está um caos, mas vale a pena! 🍲',
-          comment: '',
-          comments: [],
           liked: false,
           likes: 12,
           shares: 2,
           image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2',
-          timestamp: this.generateRandomTimestamp()
+          timestamp: '22 de julho às 13:25',
+          comments: []
         },
         {
           id: 5,
           userName: 'Marta Lima',
           userImage: 'https://randomuser.me/api/portraits/women/4.jpg',
           content: 'Reflexões sobre a vida... Às vezes é bom desacelerar e pensar em tudo que conquistamos.',
-          comment: '',
-          comments: [],
           liked: true,
           likes: 18,
           shares: 4,
-          image: null,  // Post apenas com texto
-          timestamp: this.generateRandomTimestamp()
+          image: null,
+          timestamp: '21 de julho às 09:55',
+          comments: []
         }
       ],
       visiblePosts: [],
       loading: false,
       newPostContent: '',
-      showCreatePostModal: false,  // New state for modal visibility
+      showCreatePostModal: false,
+      filePreviews: [],
+      files: [],
       showEditModal: false,
       showDeleteModal: false,
       editedPostContent: '',
@@ -151,11 +171,26 @@ export default {
     navigate(route) {
       this.$router.push(route);
     },
+    loadMorePosts() {
+      this.loading = true;
+      setTimeout(() => {
+        const startIndex = this.visiblePosts.length;
+        const endIndex = startIndex + 5;
+        const newPosts = this.posts.slice(startIndex, endIndex);
+        
+        if (newPosts.length > 0) {
+          this.visiblePosts = [...this.visiblePosts, ...newPosts];
+        }
+        this.loading = false;
+      }, 1000);
+    },
     openModal() {
       this.showCreatePostModal = true;
     },
     closeModal() {
       this.showCreatePostModal = false;
+      this.filePreviews = [];
+      this.files = [];
     },
     createPost() {
       if (this.newPostContent.trim() !== '') {
@@ -170,18 +205,27 @@ export default {
           liked: false,
           likes: 0,
           shares: 0,
-          image: null,
+          image: this.files.find(file => file.type.startsWith('image/'))?.url || null,
+          video: this.files.find(file => file.type.startsWith('video/'))?.url || null,
           timestamp: this.generateRandomTimestamp()
         };
         this.posts.unshift(newPost);
         this.newPostContent = '';
         this.visiblePosts.unshift(newPost);
-        this.closeModal();  // Close modal after posting
+        this.closeModal();
       }
     },
     cancelCreatePost() {
       this.newPostContent = '';
       this.closeModal();
+    },
+    handleFileUpload(event) {
+      const files = Array.from(event.target.files);
+      this.filePreviews = files.map(file => ({
+        url: URL.createObjectURL(file),
+        type: file.type
+      }));
+      this.files = files;
     },
     generateRandomTimestamp() {
       const months = [
@@ -194,46 +238,6 @@ export default {
       const minute = Math.floor(Math.random() * 60);
       return `${day} de ${month} às ${hour}:${minute < 10 ? '0' + minute : minute}`;
     },
-    loadMorePosts() {
-      this.loading = true;
-      setTimeout(() => {
-        const startIndex = this.visiblePosts.length;
-        const endIndex = startIndex + 5;
-        this.visiblePosts = this.posts.slice(0, endIndex);
-        this.loading = false;
-      }, 1000);
-    },
-    editPost(post) {
-      this.postToEdit = post;
-      this.editedPostContent = post.content;
-      this.showEditModal = true;
-    },
-    saveEdit() {
-      if (this.postToEdit) {
-        this.postToEdit.content = this.editedPostContent;
-        this.showEditModal = false;
-        this.postToEdit = null;
-      }
-    },
-    cancelEdit() {
-      this.showEditModal = false;
-      this.postToEdit = null;
-    },
-    deletePost(post) {
-      this.postToDelete = post;
-      this.showDeleteModal = true;
-    },
-    confirmDelete() {
-      const index = this.posts.findIndex(p => p.id === this.postToDelete.id);
-      if (index !== -1) {
-        this.posts.splice(index, 1);
-        this.visiblePosts = this.posts.slice(0, this.visiblePosts.length);
-      }
-      this.showDeleteModal = false;
-    },
-    cancelDelete() {
-      this.showDeleteModal = false;
-    },
     toggleLike(post) {
       post.liked = !post.liked;
       post.likes += post.liked ? 1 : -1;
@@ -241,11 +245,29 @@ export default {
     sharePost(post) {
       post.shares++;
     },
-    addComment(post) {
-      if (post.comment.trim() !== '') {
-        post.comments.push({ id: Date.now(), text: post.comment });
-        post.comment = '';
+    editPost(post) {
+      this.postToEdit = post;
+      this.editedPostContent = post.content;
+      this.showEditModal = true;
+    },
+    saveEditPost() {
+      if (this.postToEdit) {
+        this.postToEdit.content = this.editedPostContent;
+        this.showEditModal = false;
+        this.postToEdit = null;
       }
+    },
+    cancelEditPost() {
+      this.showEditModal = false;
+      this.postToEdit = null;
+    },
+    deletePost(post) {
+      const index = this.posts.findIndex(p => p.id === post.id);
+      if (index !== -1) {
+        this.posts.splice(index, 1);
+        this.visiblePosts = this.posts.slice(0, this.visiblePosts.length);
+      }
+      this.showDeleteModal = false;
     }
   }
 };
@@ -273,7 +295,7 @@ export default {
   max-width: 400px;
 }
 
-.post img {
+.post img, .post video {
   max-width: 100%;
   margin-top: 10px;
 }
@@ -318,7 +340,7 @@ export default {
   border-radius: 10px;
   max-width: 400px;
   width: 100%;
-  box-sizing: border-box; /* Certifica que o padding não afete a largura do modal */
+  box-sizing: border-box;
 }
 
 .modal h2 {
@@ -327,15 +349,41 @@ export default {
 
 .modal-textarea {
   width: 100%;
-  max-width: 100%; /* Certifica que o textarea não ultrapasse a largura do modal */
-  height: 150px; /* Ajuste a altura conforme necessário */
+  max-width: 100%; 
+  height: 150px; 
   margin-bottom: 10px;
-  box-sizing: border-box; /* Certifica que o padding não afete a largura do textarea */
+  box-sizing: border-box; 
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  resize: vertical; /* Permite que o usuário redimensione a altura do textarea */
+  resize: vertical; 
+}
+
+.file-input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.preview {
+  display: inline-block;
+  max-width: 100px;
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.preview img, .preview video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 5px;
 }
 
 .modal-buttons {
@@ -358,6 +406,7 @@ export default {
   background-color: #180c45;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .modal-cancel-button {
   background-color: #ccc;
   padding: 8px 16px;
@@ -382,7 +431,7 @@ export default {
 .user-image {
   width: 40px;
   height: 40px;
-  border-radius: 40%;
+  border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
 }
@@ -395,13 +444,13 @@ export default {
 }
 
 .user-details {
-  margin-right: 10px; 
+  margin-right: 10px;
 }
 
 .post-timestamp {
   display: block;
-  font-size: 14px; 
-  color: #666; 
+  font-size: 14px;
+  color: #666;
 }
 
 .post-actions {
@@ -456,15 +505,15 @@ export default {
 }
 
 .edit-buttons img {
-  display: block; 
+  display: block;
 }
 
 .icon-button {
   border: none;
   background: none;
   cursor: pointer;
-  padding: 5px;  
-  margin-right: 3px;  
+  padding: 5px;
+  margin-right: 3px;
 }
 
 span.edit-buttons {
@@ -477,6 +526,6 @@ span.edit-buttons {
 
 .icon-button i {
   color: #140841;
-  font-size: 16px; 
+  font-size: 16px;
 }
 </style>

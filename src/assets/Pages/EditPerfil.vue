@@ -173,22 +173,73 @@ export default {
       avatar: null
     };
   },
- mounted() {
-  this.initScene();
-  this.loadDefaultAvatar();
-},
+  mounted() {
+    this.initScene();
+    this.loadAvatarByGender(); // Carregar o avatar com base no gênero selecionado inicialmente
+  },
+  methods: {
+    initScene() {
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000); // Ajuste a proporção para o tamanho do canvas
+      this.renderer = new THREE.WebGLRenderer({ alpha: true });
+      this.renderer.setSize(400, 400); // Tamanho fixo para o canvas
+      const container = document.getElementById('avatar-container');
+      if (container) {
+        container.appendChild(this.renderer.domElement);
+      }
+      this.camera.position.z = 3;
+      this.animate = this.animate.bind(this);
+    },
+    loadAvatarByGender() {
+      const loader = new GLTFLoader();
+      const modelPath = this.customAvatar.gender === 'masculino' 
+        ? '/models/male_avatar.glb' 
+        : '/models/female_avatar.glb';
 
-methods: {
-  loadDefaultAvatar() {
-    const loader = new GLTFLoader();
-    loader.load('/models/character.glb', (gltf) => {
-      this.avatar = gltf.scene;
-      this.scene.add(this.avatar);
-      this.renderer.render(this.scene, this.camera); 
+      // Remover o avatar atual antes de carregar o novo
+      if (this.avatar) {
+        this.scene.remove(this.avatar);
+        this.avatar = null;
+      }
+
+      loader.load(modelPath, (gltf) => {
+        this.avatar = gltf.scene;
+        this.scene.add(this.avatar);
+        this.updateAvatar('skin'); // Atualizar cor da pele após carregar o novo avatar
+        this.updateAvatar('hair'); // Atualizar cabelo após carregar o novo avatar
+        this.renderer.render(this.scene, this.camera);
+        this.animate(); // Inicia a animação
       });
     },
-    closeCreateAvatarModal() {
-      this.showCreateAvatarModal = false;
+    updateAvatar(part) {
+      if (this.avatar) {
+        if (part === 'gender') {
+          this.loadAvatarByGender();
+        } else if (part === 'skin') {
+          this.avatar.traverse((child) => {
+            if (child.isMesh && child.name.includes('Skin')) {
+              child.material.color.set(this.customAvatar.skinColor);
+            }
+          });
+        } else if (part === 'hair') {
+          this.avatar.traverse((child) => {
+            if (child.isMesh && child.name.includes('Hair')) {
+              child.material.color.set(this.customAvatar.hairColor);
+            }
+          });
+        } else if (part === 'outfit') {
+          // Implementar lógica de troca de roupa
+        } else if (part === 'accessory') {
+          // Implementar lógica de troca de acessórios
+        }
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+    animate() {
+      requestAnimationFrame(this.animate);
+      if (this.avatar) {
+        this.renderer.render(this.scene, this.camera);
+      }
     },
     triggerCoverUpload() {
       this.$refs.coverInput.click();
@@ -227,55 +278,6 @@ methods: {
       this.customAvatar.hairColor = color;
       this.updateAvatar('hair');
     },
-    initScene() {
-      this.scene = new THREE.Scene();
-      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      this.renderer = new THREE.WebGLRenderer({ alpha: true });
-      this.renderer.setSize(400, 400);
-      const container = document.getElementById('avatar-container');
-      if (container) {
-        container.appendChild(this.renderer.domElement);
-      }
-      this.camera.position.z = 3;
-      this.animate = this.animate.bind(this);
-    },
-    loadAvatar() {
-      const loader = new GLTFLoader();
-      loader.load('/models/character.glb', (gltf) => {
-        this.avatar = gltf.scene;
-        this.scene.add(this.avatar);
-        this.animate();
-      });
-    },
-    updateAvatar(part) {
-      if (this.avatar) {
-        if (part === 'gender') {
-        } else if (part === 'skin') {
-          this.avatar.traverse((child) => {
-            if (child.isMesh && child.name.includes('Skin')) {
-              child.material.color.set(this.customAvatar.skinColor);
-            }
-          });
-        } else if (part === 'hair') {
-          this.avatar.traverse((child) => {
-            if (child.isMesh && child.name.includes('Hair')) {
-              child.material.color.set(this.customAvatar.hairColor);
-            }
-          });
-        } else if (part === 'outfit') {
-          // Implementar lógica de troca de roupa
-        } else if (part === 'accessory') {
-          // Implementar lógica de troca de acessórios
-        }
-        this.renderer.render(this.scene, this.camera);
-      }
-    },
-    animate() {
-      requestAnimationFrame(this.animate);
-      if (this.avatar) {
-        this.renderer.render(this.scene, this.camera);
-      }
-    },
     captureAvatar() {
       this.renderer.render(this.scene, this.camera);
       const imgData = this.renderer.domElement.toDataURL('image/png');
@@ -284,6 +286,12 @@ methods: {
     },
     saveProfile() {
       alert(`Perfil salvo com sucesso! \nNome: ${this.firstName} ${this.lastName}`);
+    },
+    closeCreateAvatarModal() {
+      this.showCreateAvatarModal = false;
+    },
+    openCreateAvatarModal() {
+      this.showCreateAvatarModal = true;
     }
   }
 };
