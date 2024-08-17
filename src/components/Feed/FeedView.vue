@@ -47,9 +47,15 @@
       <div class="modal">
         <h2>Criar Publicação</h2>
         <textarea v-model="newPostContent" placeholder="No que você está pensando?" class="modal-textarea"></textarea>
-        
-        <!-- Upload Section -->
-        <input type="file" @change="handleFileUpload" multiple class="file-input" accept="image/*,video/*">
+
+        <!-- Box Icons Section -->
+        <div class="box-icons">
+         <label for="file-upload" class="custom-file-upload">
+          <img src="https://img.icons8.com/?size=100&id=97397&format=png&color=000000" alt="Upload Icon" class="upload-icon">
+        </label>
+        <input id="file-upload" type="file" @change="handleFileUpload" multiple class="file-input" accept="image/*,video/*">
+        </div>       
+
         <div v-if="filePreviews.length > 0" class="previews">
           <div v-for="(file, index) in filePreviews" :key="index" class="preview">
             <img v-if="file.type.startsWith('image/')" :src="file.url" class="preview-image">
@@ -88,9 +94,7 @@ export default {
   data() {
     return {
       userProfileImage: 'https://randomuser.me/api/portraits/lego/6.jpg',
-      isUserMenuOpen: false,
       posts: [
-        // Posts existentes
         {
           id: 1,
           userName: 'Ana Paula Souza',
@@ -157,11 +161,8 @@ export default {
       newPostContent: '',
       showCreatePostModal: false,
       filePreviews: [],
-      files: [],
       showEditModal: false,
-      showDeleteModal: false,
       editedPostContent: '',
-      postToDelete: null,
       postToEdit: null
     };
   },
@@ -191,7 +192,6 @@ export default {
     closeModal() {
       this.showCreatePostModal = false;
       this.filePreviews = [];
-      this.files = [];
     },
     createPost() {
       if (this.newPostContent.trim() !== '') {
@@ -224,7 +224,6 @@ export default {
         url: URL.createObjectURL(file),
         type: file.type
       }));
-      this.files = files;
     },
     generateRandomTimestamp() {
       const months = [
@@ -259,14 +258,6 @@ export default {
     cancelEditPost() {
       this.showEditModal = false;
       this.postToEdit = null;
-    },
-    deletePost(post) {
-      const index = this.posts.findIndex(p => p.id === post.id);
-      if (index !== -1) {
-        this.posts.splice(index, 1);
-        this.visiblePosts = this.posts.slice(0, this.visiblePosts.length);
-      }
-      this.showDeleteModal = false;
     }
   }
 };
@@ -297,6 +288,25 @@ export default {
 .post img, .post video {
   max-width: 100%;
   margin-top: 10px;
+}
+
+.upload-icon[data-v-ab293e58] {
+    width: 23px;
+    height: 21px;
+}
+
+.box-icons {
+      display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgb(40 18 120 / 6%);
+    border-radius: 8px;
+    width: 98%;
+    background-color: rgba(40, 18, 120, 0.2); 
+    margin-top: 0;
+    padding: 4px; 
+    height: 24px; 
+    margin-bottom: 1vw;
 }
 
 .comment-box {
@@ -359,9 +369,18 @@ export default {
   resize: vertical; 
 }
 
+.custom-file-upload {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.upload-icon {
+  width: 50px;
+  height: 50px;
+}
+
 .file-input {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  display: none;
 }
 
 .previews {
@@ -477,13 +496,6 @@ h1 {
 
 .action-button:hover {
   background-color: #180c45;
-}
-
-.likes-count,
-.shares-count {
-  margin-right: 10px;
-  font-size: 14px;
-  color: #666;
 }
 
 .loading {
