@@ -3,14 +3,14 @@
     <!-- Capa do perfil -->
     <div class="cover-photo">
       <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQxsdbrkQqRfP5zI_1Kt6Fx809rAXXxsyhBYcf0iK5fF7h_9m0NSnMGT9zZotBb_9jEzf70HRlHnL2P3Y3JqPPVoP0cPJPHG3IlqC6xwJb1b-uTDhzG23BY8mmrsHTIJwemc4TD9r8NG45/s1600/Capa+para+Facebook+-fb-capas.blogspot+-+estilo+intagram+-+dente+de+leao.jpg" alt="Capa do Perfil" class="cover-image">
-      <button class="edit-cover-button">Editar foto da capa</button>
+      
     </div>
 
     <!-- Foto e informações do perfil -->
     <div class="profile-info">
       <img src="https://randomuser.me/api/portraits/lego/6.jpg" alt="Foto de Perfil" class="profile-image">
       <div class="profile-details">
-        <h1 class="profile-name">Julia Silva</h1>
+        <h1 class="profile-name">Ylanna Almeida</h1>
         <p class="profile-friends">49 amigos</p>
         <div class="profile-actions">
           <button class="add-story-button">+ Adicionar ao story</button>
@@ -36,7 +36,7 @@
         <h2>Publicações</h2>
         <div v-for="post in posts" :key="post.id" class="post-card">
           <div class="post-header">
-            <img :src="post.userImage" alt="User Image" class="post-user-image">
+            <img :src="post.userImage" alt="User Perfil Image" class="perfil-user-image">
             <div>
               <h3 class="post-user-name">{{ post.userName }}</h3>
               <p class="post-timestamp">{{ post.timestamp }}</p>
@@ -98,7 +98,7 @@ export default {
       return [
         {
           id: 1,
-          userName: 'Julia Silva',
+          userName: 'Ylanna Almeida',
           userImage: 'https://randomuser.me/api/portraits/lego/6.jpg',
           content: 'Javascript que me deu!',
           timestamp: '22 de agosto às 6:05',
@@ -285,7 +285,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.post-user-image {
+.perfil-user-image {
   width: 40px;
   height: 40px;
   border-radius: 50%;

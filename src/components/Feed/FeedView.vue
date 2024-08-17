@@ -18,7 +18,7 @@
               <span class="user-name">{{ post.userName }}</span>
               <span class="post-timestamp">{{ post.timestamp }}</span>
             </div>
-            <span v-if="post.userName === 'Julia Silva'" class="edit-buttons">
+            <span v-if="post.userName === 'Ylanna Almeida'" class="edit-buttons">
               <button @click="editPost(post)" class="icon-button"><i class="fas fa-pencil-alt"></i></button>
               <button @click="deletePost(post)" class="icon-button"><i class="fas fa-trash"></i></button>
             </span>
@@ -197,7 +197,7 @@ export default {
       if (this.newPostContent.trim() !== '') {
         const newPost = {
           id: Date.now(),
-          userName: 'Julia Silva',
+          userName: 'Ylanna Almeida',
           userImage: this.userProfileImage,
           content: this.newPostContent,
           liked: false,
@@ -440,10 +440,17 @@ export default {
   font-size: 18px;
   color: #333;
   font-family: 'Helvetica Neue', Arial, sans-serif;
+  white-space: nowrap;
 }
 
 .user-details {
   margin-right: 10px;
+}
+
+h1 {
+    display: flex;
+    justify-content: space-around;
+    margin-right: 26vw;
 }
 
 .post-timestamp {
@@ -501,6 +508,7 @@ export default {
 .edit-buttons button {
   background: none;
   cursor: pointer;
+  
 }
 
 .edit-buttons img {
@@ -513,10 +521,12 @@ export default {
   cursor: pointer;
   padding: 5px;
   margin-right: 3px;
+  
 }
 
 span.edit-buttons {
-  margin-left: 33%;
+  margin-left: 41%!important;
+  white-space: nowrap;
 }
 
 .icon-button:last-child {

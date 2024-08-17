@@ -5,7 +5,7 @@
     </div>
     <div class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" @click="navigate({ name: 'feed' })">
+        <a class="navbar-item" @click="goToFeed">
           <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" alt="Início" class="home-icon">
         </a>
       </div>
@@ -13,10 +13,10 @@
         <div class="user-menu" @click="toggleUserMenu">
           <img :src="userProfileImage" alt="User Image" class="user-image">
           <div v-if="isUserMenuOpen" class="dropdown">
-            <a class="dropdown-item" @click="navigate({ name: 'profile' })">Perfil</a>
-            <a class="dropdown-item" @click="navigate({ name: 'settings' })">Configurações e privacidade</a>
-            <a class="dropdown-item" @click="navigate({ name: 'support' })">Ajuda e suporte</a>
-            <a class="dropdown-item" @click="navigate({ name: 'login' })">Sair</a>
+            <a class="dropdown-item" @click="goToProfile">Perfil</a>
+            <a class="dropdown-item" @click="goToSettings">Configurações e privacidade</a>
+            <a class="dropdown-item" @click="goToSupport">Ajuda e suporte</a>
+            <a class="dropdown-item" @click="goToLogin">Sair</a>
           </div>
         </div>
       </div>
@@ -42,12 +42,25 @@ export default {
     toggleUserMenu() {
       this.isUserMenuOpen = !this.isUserMenuOpen;
     },
-    navigate(route) {
-      this.$emit('navigate', route);
+    goToFeed() {
+      this.$router.push({ name: 'feed' });
+    },
+    goToProfile() {
+      this.$router.push({ name: 'profile' });
+    },
+    goToSettings() {
+      this.$router.push({ name: 'settings' });
+    },
+    goToSupport() {
+      this.$router.push({ name: 'support' });
+    },
+    goToLogin() {
+      this.$router.push({ name: 'login' });
     }
   }
 };
 </script>
+
 
 <style scoped>
 .navbar {
