@@ -136,8 +136,8 @@ export default {
   name: 'EditPerfil',
   data() {
     return {
-      firstName: 'Julia',
-      lastName: 'Silva',
+      firstName: 'Lanna',
+      lastName: 'Almeida',
       currentCoverPhoto: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQxsdbrkQqRfP5zI_1Kt6Fx809rAXXxsyhBYcf0iK5fF7h_9m0NSnMGT9zZotBb_9jEzf70HRlHnL2P3Y3JqPPVoP0cPJPHG3IlqC6xwJb1b-uTDhzG23BY8mmrsHTIJwemc4TD9r8NG45/s1600/Capa+para+Facebook+-fb-capas.blogspot+-+estilo+intagram+-+dente+de+leao.jpg',
       currentProfilePicture: 'https://randomuser.me/api/portraits/lego/6.jpg',
       selectedCoverPhoto: '',

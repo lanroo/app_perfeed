@@ -6,9 +6,6 @@ import FeedView from '@/components/Feed/FeedView.vue';
 import PerfilPage from '@/assets/Pages/PerfilPage.vue';
 import EditPerfil from '@/assets/Pages/EditPerfil.vue';
 
-
-
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
